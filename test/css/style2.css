@@ -1,0 +1,159 @@
+/*********************
+General
+**********************/
+
+body    {
+    margin: 0px;
+    font-family: 'Open Sans Condensed', sans-serif;
+    background-color:#F9FADD;
+}
+
+#secondary-nav {
+    text-align: right;
+    color:; #332f29;
+    font-size: 12px;
+    margin-right: 25px;
+}
+
+
+h1 {
+    font-size: 72px;
+    text-transform: lowercase;
+    font-family: 'Open Sans Condensed', sans-serif;
+    background-color: #FB1B40;
+    color:#D4CEAC;
+    text-align: center;
+    width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 75px;}
+
+
+footer {
+visibility: hidden;}    
+
+/*********************
+HOME PAGE
+**********************/
+
+img {
+    width: 778px;
+    height: 547px;}
+
+img.align-center {
+    display:block;
+    margin: 0px auto;
+}
+/*********************
+HYPERLINKS
+**********************/
+
+li .menuitem
+ {color: #332f29;}
+
+
+ul {list-style-type: none;}
+
+li .selected {
+    color:#8fa68e;
+}
+
+nav li {
+    list-style-type: none;
+    font-size: 20px;
+    display: inline-block;
+    margin-right: 50px;
+}
+
+li.publications {
+    display: block;
+}
+
+a.publications {
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 2.4em; 
+}
+
+a:hover {color:#d4ceac;}
+
+a {text-decoration: none;}
+
+.main-nav
+    {text-align: center;
+    padding: 25px;
+    margin-top: -50px;
+    width: 800px;
+    margin-right: auto;
+    margin-left: auto;
+    }
+
+.booklink {font-weight: bold;}
+
+/*********************
+ABOUT
+**********************/
+.main-container {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 0 5%;
+
+}
+p {
+    margin-left: 35px;
+    height: 40%;
+    width: 40%;
+    font-family: sans-serif;
+    line-height: 1.4em;
+}
+
+p#aboutme {margin: 10px auto;}
+
+/*********************
+PORTFOLIO
+**********************/
+
+h2 {
+    margin-left: 75px;
+    font-size: 30px;
+    text-decoration: underline;
+
+}
+
+.main-content {
+    margin-left: 120px;}
+
+li .publications 
+{font-weight: bold;
+color: #332f29;
+}
+
+.column1of2 {
+    float: left;
+    margin: 25px;
+    width: 600px
+}
+
+.column2of2{
+    float:left;
+    margin: 25px;
+    width: 600px;
+}
+
+#webpara {
+    font-family: sans-serif;
+    width:600px;
+}
+
+/*********************
+BLOG
+**********************/ 
+#blogpara {
+    font-family: sans-serif;
+    width: 180px;
+    text-align: center;
+}
+
+p#blogpara {
+    margin: auto;
+}

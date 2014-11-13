@@ -1,0 +1,18 @@
+.leaflet-container {
+    background: #FFF;
+}
+
+#map {
+    height: 300px;
+}
+
+.nav {
+	height: 300px;
+	background: url(https://guildwars2.staticwars.com/wp-content/themes/guildwars2.com-live/img/bumpers/header.2528213723.jpg) no-repeat 50% 0;
+}
+
+@media screen and (min-width: 480px) {
+	#map {
+		height: 600px;
+	}
+}

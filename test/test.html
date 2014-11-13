@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo App</title>
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8">    
+</head>
+<body>
+    <body>
+    <div class="container">
+      <p>
+        <label for="new-task">Add Item</label>
+        <input id="new-task" type="text">
+        <button>Add</button>
+      </p>
+
+      <h3>Todo</h3>
+      <ul id="incomplete-tasks">
+        <li>
+            <input type="checkbox">
+            <label>Pay Bills</label>
+            <input type="text">
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+        </li>
+        <li class="editMode">
+            <input type="checkbox">
+            <label>Go Shopping</label>
+            <input type="text" value="Go Shopping">
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+        </li>
+
+      </ul>
+
+      <h3>Completed</h3>
+      <ul id="completed-tasks">
+        <li>
+            <input type="checkbox" checked>
+            <label>See the Doctor</label>
+            <input type="text">
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+        </li>
+      </ul>
+    </div>
+<script>
+var taskInput = document.getElementById("new-task");
+var addButton = document.getElementsByTagName("button")[0];
+var incompleteTasksHolder= document.getElementById("incomplete-tasks");
+var completedTasksHolder = document.getElementById("completed-tasks");
+
+var addTask = function(){
+console.log("Add task...");
+var listItem = createNewTaskElement(taskInput.value); 
+incompleteTasksHolder.appendChild(listItem);
+}
+var editTask = function(){
+console.log("Edit task...");
+
+}
+var deleteTask = function(){
+console.log("Delete task...");
+
+}
+var taskComplete = function(){
+console.log("Completed task...");
+
+}
+var taskIncomplete = function(){
+console.log("Incomplete task...");
+
+}
+
+var bindTasksEvents = function(taskListItem, checkBoxEventHandler)
+{
+
+    var checkBox =taskListItem.querySelector("input[type=checkbox]");
+    var editButton = taskListItem.querySelector("button.edit");
+    var deleteButton = taskListItem.querySelector("button.delete");
+
+    editButton.onclick = editTask; 
+    deleteButton.onclick = deleteTask;
+    checkBox.onchange = checkBoxEventHandler;
+}
+
+var createNewTaskElement = function(taskString){
+var listItem = document.createElement("li");
+var checkBox = document.createElement("input");
+checkBox.setAttribute('type', "checkbox");
+var label = document.createElement("label");
+label.textContent = taskString;
+var editInput = document.createElement("input");
+var deleteButton = document.createElement("button");
+deleteButton.textContent = "Delete";
+var editButton = document.createElement("button");
+editButton.textContent = "Edit";
+
+listItem.appendChild(checkBox);
+listItem.appendChild(label);
+listItem.appendChild(editInput);
+listItem.appendChild(editButton);
+listItem.appendChild(deleteButton);
+
+return listItem;
+}
+addButton.onclick = addTask;
+
+
+
+
+for(var i=0; i < incompleteTasksHolder.children.length; i++)
+{
+
+bindTasksEvents( incompleteTasksHolder.children[i], taskComplete);
+
+}
+
+for(var i=0; i < completedTasksHolder.children.length; i++)
+{
+
+bindTasksEvents( completedTasksHolder.children[i], taskIncomplete);
+
+}
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

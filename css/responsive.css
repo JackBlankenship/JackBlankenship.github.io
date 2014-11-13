@@ -1,0 +1,85 @@
+/*! responsive.css v1.1.0 | MIT License | git.io/normalize */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+@media screen and (min-width: 480px) {
+ 
+  /* ================================
+  TWO COLUMN LAYOUT
+  ================================ */
+  #primary {
+    width: 50%;
+    float: left;
+  }
+  #secondary {
+    width: 40%;
+    float: right;
+  }
+  
+  /* ================================
+  PAGE: PORTFOLIO
+  ================================ */
+  #gallery li {
+    max-width: 28.3333%;
+  }
+  #gallery li:nth-child(4n) {
+    clear: left;
+  }
+}
+
+@media screen and (min-width: 660px) {
+  #gallery li {
+    max-width: 28.3333%;
+  }
+
+
+}
+
+@media all and (max-width: 480px) {
+  /* remove margins on phones */
+    nav ul {
+      margin: 0 0;
+    }
+    ul.egmenu {  height: auto; }
+    ul.egmenu > li {  float: none; 
+                      width: 100%; 
+                    background: #a1c1ff;}
+    ul.egmenu > li a ul {  float: none; width: 100%; }
+    ul.egmenu a { line-height: 40px; }
+    ul.egmenu ul { position: relative; }
+
+
+    ul.egmenu li.hover { background: lightblue;  }
+    ul.egmenu li.tap { background: lightblue;  }
+    ul.egmenu li.tap ul { display: block;  }
+    li.has-sub ul li { background-color: #b0d0ff;
+                        border-top: 1px solid mediumblue;
+                        width: 100%  }
+  
+}
+@media all and (min-width: 481px) {
+
+  .col {
+    float: left;
+  }
+  .main {
+    width: 65.957446808511%;
+  }
+  .secondary {
+    width: 31.914893617021%; 
+    margin-left: 2.127659574468%;
+  }
+}
+@media only screen and (min-width: 769px) { 
+
+  .main {
+    width: 40.425531914894%;
+  }
+  .extra {
+    display: block;
+    margin-left: 2.127659574468%;
+    width: 23.404255319149%;
+  }
+}

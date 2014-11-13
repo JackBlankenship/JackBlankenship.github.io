@@ -1,0 +1,241 @@
+/*    HTML5 display definitions     */
+/* color scheme for when I use SASS .scss  */
+/* 
+$blue1: #b3d1ff;
+$lightpurple: #bab3ff;
+$lightviolet:  #e0b3ff;
+$lightpink: #ffb3f7;
+$lightaqua: b3f7ff;
+$semiblue: #75acff;
+$mediumblue: #3888ff;
+$salmon: #ffb3d1;
+$lightgreen: #b3ffe0;
+$orange: #ffaf38;
+$lightorange: #ffc875;
+$mehpink: #ffbab3;
+$offgreen: #b3ffba;
+$palegreen: #d1ffb3;
+$paleyellow: #f7ffb3;
+$dunno: #ffe0b3;
+
+
+*/
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+#wrapper {
+  left: clear;
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 0 5%;
+
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+    
+h3 {
+  margin 0 0 1em 0;
+  font-weight: 800;
+}
+
+/* ===================
+Heading 
+=================== */
+
+header {
+  float: left;
+  margin: 0 0 30px 0;
+  padding: 5px 0 0 0;
+  width: 100%
+}
+
+#logo {
+  text-align: center;
+  margin: 0;
+  background-color: #b0d0ff;
+  border-bottom: 5px solid #3888ff;
+}
+
+h1, h2 {
+  color: #fff;
+  font-family: 'Indie Flower', cursive;
+  font-weight: normal; 
+}
+
+h1 { 
+  margin: 15px 0;
+  font-size: 1.75em;
+  line-height: 0.8em;
+}
+
+h2 {
+  font-size: 1.25em;
+  margin: -5px 0 0;
+}
+
+
+/* =============================
+NAVIGATION 
+============================= */
+
+nav {
+  text-align: center;
+  padding: 10px 0;
+  margin: 20px 0 0;
+  background-color: #a1c1ff;
+}
+
+nav a, nav a:visited {
+  color: #fff;
+}
+
+nav a.selected, nav a:hover {
+  color: mediumblue;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0 0px;
+  padding: 0;
+}
+
+nav li {
+  display:inline-block;
+}
+
+nav a {
+  font-weight: 800;
+  padding: 15px 10px;
+}
+
+/* ===============================
+FOOTER 
+=============================== */
+
+footer {
+  font-size: 0.75em;
+  text-align: center;
+  clear: both;
+  padding-top: 50px;
+  color: #ccc;
+}
+
+.social-icon {
+  width: 20px;
+  height: 20px;
+  margin: 0 5px;
+}
+
+/* ================================
+   PAGE:PORTFOLIO index.html 
+================================ */
+
+#gallery {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#gallery li {
+  float: left;
+  width: 45%;
+  margin: 2.5%;
+  background-color: #f5f5f5;
+  color: #bdc3c7;
+}
+
+#gallery li a p {
+  margin: 0;
+  padding: 5%;
+  font-size: 0.80em;
+  color: mediumblue;
+}
+/* image click from portfolio */
+#overlay {
+  background:rgba(0,0,0,0.7);
+  width:100%;
+  height:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  display:none;
+  text-align:center;
+}
+
+#overlay img {
+ margin-top: 5%; 
+}
+
+#overlay p {
+ color:white; 
+}
+
+/* ===================================
+PAGE: ABOUT
+=================================== */
+
+.profile-photo {
+  display: block;
+  max-width: 150px;
+  margin: 0 auto 30px;
+  border-radius: 100%;
+}
+
+#primary p, .contact-info {
+  font-size: 0.8em;
+}
+
+.contact-info {
+  padding: 0;
+}
+/* ===================================
+COLORS
+=================================== */
+
+body {
+  background-color: #fff;
+  color: mediumblue;
+}
+/* ===============================
+PAGE: ALL with class .egmenu .has-sub;
+================================*/
+ul.egmenu {  
+/*   background: #b0d0ff; too light */
+    background: #a1c1ff;
+    height: 30px;
+    width: 100%; 
+}
+
+ul.egmenu > li { 
+    float: left; 
+    position: relative;  
+}
+
+ul.egmenu ul {
+    background: #75acff; 
+    display: none; 
+    position: absolute;
+    left: 0; top: 100%;
+}
+
+ul.egmenu a { 
+    cursor: pointer; 
+    display: block; 
+    color: white; 
+    line-height: 30px; 
+    padding: 0 10px; 
+}
+
+ul.egmenu li { list-style: none; }
+
+ul.egmenu li:hover { background: #ffaf38; /* #75acff */;  
+                   /*   border-top: 2px solid #ffaf38; */  }
+ul.egmenu li:hover ul { display: block;  }
+/* #b0d0ff */
