@@ -17,6 +17,7 @@ $offgreen: #b3ffba;
 $palegreen: #d1ffb3;
 $paleyellow: #f7ffb3;
 $dunno: #ffe0b3;
+$gold: #b88a00;
 
 
 */
@@ -64,7 +65,8 @@ header {
 }
 
 h1, h2 {
-  color: #fff;
+  color: #b88a00;
+  text-shadow: 2px 2px 4px white;
   font-family: 'Indie Flower', cursive;
   font-weight: normal; 
 }
@@ -206,6 +208,9 @@ body {
 /* ===============================
 PAGE: ALL with class .egmenu .has-sub;
 ================================*/
+p {
+  color: maroon;
+}
 ul.egmenu {  
 /*   background: #b0d0ff; too light */
     background: #a1c1ff;
