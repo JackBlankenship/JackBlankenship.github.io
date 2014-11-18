@@ -27,9 +27,9 @@ li a {
     background: #2f3036;
     text-decoration: none;
     border-radius: 25px;
-    background: -webkit-linear-gradient(red, blue); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(red, blue); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(red, blue); /* For Firefox 3.6 to 15 */
+    background: -webkit-linear-gradient(#99ccff, #5c5cff); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#99ccff, #5c5cff); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#99ccff, #5c5cff); /* For Firefox 3.6 to 15 */
     background: linear-gradient(#99ccff, #5c5cff); /* Standard syntax */
 }
 
