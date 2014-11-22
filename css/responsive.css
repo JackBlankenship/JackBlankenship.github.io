@@ -39,6 +39,9 @@
 
 @media all and (max-width: 480px) {
   /* remove margins on phones */
+    header {
+        float: none;
+    }
     nav ul {
       margin: 0 0;
     }
