@@ -5,7 +5,7 @@ $blue1: #b3d1ff;
 $lightpurple: #bab3ff;
 $lightviolet:  #e0b3ff;
 $lightpink: #ffb3f7;
-$lightaqua: b3f7ff;
+$lightaqua: #b3f7ff;
 $semiblue: #75acff;
 $mediumblue: #3888ff;
 $salmon: #ffb3d1;
@@ -134,7 +134,9 @@ footer {
   height: 20px;
   margin: 0 5px;
 }
-
+.non-mobile {
+  display: none;
+}
 /* ================================
    PAGE:PORTFOLIO index.html 
 ================================ */
@@ -237,10 +239,23 @@ ul.egmenu a {
     line-height: 30px; 
     padding: 0 10px; 
 }
-
+.egmenu li ul li a:link  {
+  width:auto;
+}
 ul.egmenu li { list-style: none; }
-
-ul.egmenu li:hover { background: #ffaf38; /* #75acff */;  
-                   /*   border-top: 2px solid #ffaf38; */  }
+ul.egmenu li a:hover {
+  background-color:#ffaf38; 
+}
+ul.egmenu li:hover { background:  #ffaf38; /* #75acff */;  
+                   /*   border-top: 2px solid #ffaf38; */  
+                 }
+/* .egmenu li ul li:hover {
+  background-color:#ffaf38; 
+} */ 
 ul.egmenu li:hover ul { display: block;  }
 /* #b0d0ff */
+
+
+nav a.selected {
+  color: mediumblue;
+}

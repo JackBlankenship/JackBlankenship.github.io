@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width">
     <title>Jack Blankenship | IT Professional</title>
     <link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light|Droid+Serif:400,700|Open+Sans:400,300,600|Indie+Flower' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="css/normalize.css">
@@ -12,18 +12,18 @@
   <body>
     <header id="logo">
       <a href="index.html">
-        <h1>Jack Blankenship</h1>
-        <h2>IT Professional</h2>
+        <h1 class="shadowing">Jack Blankenship</h1>
+        <h2 class="shadowing">IT Professional</h2>
       </a>
       <nav>
         <ul class="egmenu">
           <li><a href="index.html">Home</a></li>
           <li class="has-sub">
-              <a href="#">Projects & Portfolios</a>
+              <a href="#">Portfolios</a>
                 <ul>
                   <li><a href="gw2_main.html">Guildwars2</a></li>
-                  <li><a href="JQuery_menu.html">Jquery Menu</a></li>
-                  <li><a href="JSON_parser.html">Parser</a></li>
+                  <li><a href="shiney_index.html">Shiny</a></li>
+                  <li><a href="JSON_parser.html" class="selected">Parser</a></li>
                 </ul>
           </li>
           <li class="has-sub"><a href="#">Templates</a>
@@ -31,22 +31,40 @@
               <li><a href="AJAX_Flickr.html">AJAX</a></li>
               <li><a href="tabs_index.html">Tabs</a></li>
             </ul>
-          </li> 
-          <li><a href="about.html" class="selected">About</a></li>
+          </li>  
+          <li><a href="about.html">About</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </nav>
     </header>
     <div id="wrapper">
-      <section>
-        <img src="img/0859e63.jpg" alt="Change the photo" class="profile-photo">
-        <h3>About</h3>
-        <p>I am Jack Blankenship and currently taking classes about HTML, CSS, JavaScript, jQuery, AJAX, JSON and iOS. When I am not doing that, I am either working in my yard, playing video games or having fun with my dogs.</p>
-        <p>If you would like to follow me on Twitter, my username is <a href="http://twitter.com/jackblankensh13">@jackblankensh13</a></p>
-        <h3>Experience</h3>
-        <p>Highly skilled Software developer that has worked in a variety of environments large and small. Background in Client Server and  Mainframe systems customizing both in-house and Commercial off the Shelf systems including PeopleSoft HR, Payroll and Supply Chain ERPs.
-      </section>
-      <footer>      
+      <div class="main col">
+        <h3>Description</h3>
+        <p> This will take an input that returns a JSON object and parses out information.</p>
+        <h3>Phase I</h3>
+        <p> Calls the GuildWars 2 map V1 API. Objects now have multiple objects and code needs modification to handle that condition.</p>
+        <h3>Phase II (future)</h3>
+        <p> Takes the parsed data and builds a base javascript.</p>
+      </div> 
+      <div class="secondary col">
+        <h3>Data Entry below</h3>
+            <form>
+              <label for="search">Phase II(future)</label>
+              <input type="search" name="search" id="search">
+              <input type="submit" value="Parse" id="submit">
+             
+            </form>
+      </div>
+
+      <div class="extra col">
+        <h3>Change log</h3>
+        <p>Feb. 19 2015 - Initial test.</p>
+      </div>
+      <div class="bottom col">
+          <h3>Returned values</h3>
+           <textarea name="textarea" id="textarea" rows="10" cols="25"></textarea>
+      </div>
+      <footer>
         <div class="non-mobile">
           <div class="site-nav">Projects<br>
             <ul>
@@ -66,15 +84,15 @@
               <li><a href="#">Services</a></li>
               <li><a href="#">Terms</a></li>
               <li><a href="#">Eula</a></li>
-              <li><a href="#">Privacy</a></li>              
+              <li><a href="#">Privacy</a></li>
             </ul>
           </div>
           <div class="site-nav">Contact<br>
             <ul>
-              <li><a href="#">Email</a></li>
-              <li><a href="#">Phone</a></li>
-              <li><a href="#">Twitter</a></li>
-              <li><a href="#">Facebook</a></li>
+              <li><a href="mailto:jack.d.blankenship@outlook.com">Email</a></li>
+              <li><a href="tel:(503) 610-3597">Phone</a></li>
+              <li><a href="http://twitter.com/jackblankensh13">Twitter</a></li>
+              <li><a href="http://facebook.com/jack.blankenship.942">Facebook</a></li>
             </ul>
           </div>
         </div>
@@ -83,5 +101,14 @@
         <p>&copy; 2015 Jack Blankenship.</p>
       </footer>
     </div>
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script>
+    $('.has-sub').click( function(e) {
+      //  e.preventDefault(); sadly this prevents the click on the menu.
+        $(this).parent().toggleClass('tap');
+    });
+    </script>
+    <script src="js/JSON_parser.js"></script>
   </body>
 </html>

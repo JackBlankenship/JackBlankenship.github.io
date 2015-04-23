@@ -13,11 +13,11 @@ function unproject(coord) {
 function project(latlng) {
     return map.project(latlng, map.getMaxZoom());
 }
-function onMapClick(e) {
-    alert("You clicked the map at " + project(e.latlng));
-}
-
-map.on('click', onMapClick);
+//function onMapClick(e) {
+//    alert("You clicked the map at " + project(e.latlng));
+//}
+//
+//map.on('click', onMapClick);
 $.getJSON("https://api.guildwars2.com/v1/map_floor.json?continent_id=1&floor=1", function (data) {
     var region, region_name, gameMap, i, il, poi;
     

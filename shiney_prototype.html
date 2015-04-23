@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <title>Shiny Developement</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <link rel="stylesheet" href="css/shiney.css">
+
 </head>
 <body>
+  <header>
+    <nav id="main-menu">
     <label for="show-menu" class="show-menu">Show Menu</label>
     <input type="checkbox" id="show-menu" role="button">
-        <ul id="menu">
+     <ul id="menu">
         <li><a href="shiney_index.html">Home</a></li>
         <li>
             <a href="#">About &darr;</a>
@@ -23,12 +27,25 @@
             <ul class="hidden">
                 <li><a href="shiney_prototype.html">Prototyping</a></li>
                 <li><a href="shiney_responsive.html">Responsive Web Design</a></li>
-                <li><a href="#">Illustration</a></li>
+                <li><a href="shiney_">Illustration</a></li>
             </ul>
         </li>
         <li><a href="shiney_news.html">News</a></li>
         <li><a href="shiney_contact.html">Contact</a></li>
     </ul>
-
+    <a class="logo" href="#">Logo</a>
+  </nav>
+</header>
+<div id="wrapper">
+    <div class="main col">
+        Main text
+    </div>
+     <div class="secondary col">
+        Secondary text
+    </div>
+    <div class="extra col">
+        This should float to the bottom on "mobile" view
+    </div>
+</div>
 </body>
 </html>

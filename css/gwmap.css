@@ -11,8 +11,139 @@
 	background: url(https://guildwars2.staticwars.com/wp-content/themes/guildwars2.com-live/img/bumpers/header.2528213723.jpg) 50%;
 }
 
+.logo-left {
+	background: url(https://guildwars2.staticwars.com/wp-content/themes/guildwars2.com-live/img/bumpers/gw2-eu.4211531051.png) ;
+	width: 312px;
+	height: 207px;
+/*	position: absolute; */
+	left: 20px;
+	top: 55px;
+}
+#content {
+	height: 820px;
+	/* border: 1px solid blue; background-color: #eee; */
+	font-family: 'Playfair Display', serif;
+}
+.yui3-u {
+	vertical-align: top;
+}
+#right-side-bar {
+	display: none;
+}
+#right-side-bar ul {
+	list-style: none;
+	padding: 0;
+}
+.buy-now {
+	height: 210px;
+	background: #fff url(https://guildwars2.staticwars.com/wp-content/themes/guildwars2.com-live/img/box_splash.1673957732.jpg) no-repeat scroll 0% 0%;
+	border-bottom: 3px solid #d5d5d5;
+	border-right: 1px solid #d5d5d5;
+	width: 276px;
+}
+.mod-main {
+  background: url(https://guildwars2.staticwars.com/wp-content/themes/guildwars2.com-live/img/line-top.1522778852.jpg) 85% 0 no-repeat;
+  padding-top: 4px;
+}
+.widget .bd {
+	margin-bottom: 20px;
+	border: 1px solid #d5d5d5;
+	border-top: 0;
+	position: relative;
+	border-bottom-right-radius: 2px;
+	border-bottom-left-radius: 2px;
+	box-shadow: rgba(0,0,0,0.5) 1px 1px 5px;
+} 
+.buy-now .splash {
+	color: #fff;
+	position: relative;
+	left: 127px;
+	top: 76px;
+	text-transform: uppercase;
+	font-size: 32px;
+	line-height: 1;
+}
+
+.widget-container .bd .more {
+  margin: 0 8px 0 10px;
+  padding-top: 10px;
+  color: #b40000;
+  position: relative;
+  bottom: 20px;
+  display: block;
+  text-transform: uppercase;
+  font-size: 11px;
+  overflow: visible;
+}
+.news {
+	/*font-family: 'Arimo', arial; */
+
+	font-size: 16px;
+}
+.news h3 {
+		font-weight: normal;	
+}
+.news .text {
+	font-size: 14px;
+	font-family: Arimo, arial;
+	color: #878787;
+}
+.news .mod {
+  min-height: 76px;
+  margin-top: 30px;
+  background: url(https://guildwars2.staticwars.com/wp-content/themes/guildwars2.com-live/img/home/news-bg.3656059187.jpg) no-repeat 0 0;
+}
+.news .bd .more-arr {
+  padding-right: 30px;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAARCAYAAAAPFIbmAAAAGXRFW…652R5nSAshzL5wRFpKaY5de6SVUgZbyyVYw1r7uvtPPwEGAH+j8/F9LmcLAAAAAElFTkSuQmCC) no-repeat 100% 2px;
+}
 @media screen and (min-width: 480px) {
 	#map {
+		border: 1px solid grey;
 		height: 600px;
 	}
+
+
+}
+@media screen and (min-width: 650px) {
+	#blog {
+		display: inline-block;
+		width: 100%;
+	}
+	/* #right-side-bar {
+		display: inline-block;
+		width: 100%;
+		background-color: #fff;
+		 border: 1px solid red; 
+	} */
+}
+@media screen and (min-width: 940px) {
+	#blog {
+		width: 60.43%;
+	}
+	#right-side-bar {
+		display: inline-block;
+		margin-left: 28px;
+		width: 278px;
+	}	
+	.buy-now {
+	height: 210px;
+	background: #fff url(https://guildwars2.staticwars.com/wp-content/themes/guildwars2.com-live/img/box_splash.1673957732.jpg) no-repeat scroll 50% 50%;
+	}
+	.widget-container {
+		margin-top: 25px
+	}
+}
+@media screen and (min-width: 1024px) {
+	.page-width {
+		width: 980px;
+		margin: 0 auto;
+	}
+	#blog {
+		width: 620px;
+	}
+	#right-side-bar {
+		width: 278px;
+	}
+
 }

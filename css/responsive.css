@@ -27,6 +27,30 @@
   #gallery li:nth-child(4n) {
     clear: left;
   }
+  .non-mobile {
+    display: block;
+
+  }
+  .non-mobile li {
+    list-style: none;
+  }
+  .site-nav {
+    width: 25%;
+    float: left;
+    text-align: left;
+    border-top: 1px solid black;
+    padding-top: 5px;
+    height: 91px;
+    padding-bottom: 20px;
+  }  
+  .site-nav ul {
+    padding: 0;
+    margin: 0 10% 0 0;
+   }
+  .site-nav a {
+    color: #888;
+  }
+
 }
 
 @media screen and (min-width: 660px) {
@@ -73,6 +97,9 @@
   .secondary {
     width: 31.914893617021%; 
     margin-left: 2.127659574468%;
+  }
+  .bottom {
+    width: 90%;
   }
 }
 @media only screen and (min-width: 769px) { 

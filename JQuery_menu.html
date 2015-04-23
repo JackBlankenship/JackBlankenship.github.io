@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Jack Blankenship | IT Professional</title>
+    <link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light|Droid+Serif:400,700|Open+Sans:400,300,600|Indie+Flower' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/jquery_menu.css">
+  </head>
+  <body>
+    <header id="logo">
+      <a href="index.html">
+        <h1 class="shadowing">Jack Blankenship</h1>
+        <h2 class="shadowing">IT Professional</h2>
+      </a>
+      <nav>
+          <ul class="myMenu">
+            <li><a href="index.html">Home</a></li>
+            <li class="has-sub"><a href="#">JQuery menus</a>
+              <ul>
+                  <li><a href="#" class="selected">Simple</a></li>
+                  <li><a href="#">Nothing to see here</a></li>
+                  <li><a href="gw2_main.html">Advanced</a></li>
+              </ul>
+            </li>
+            <li class="has-sub"><a href="#">Resources</a>
+               <ul>
+                  <li><a href="http://tnw.to/r3N6j">300 free</a></li>
+                  <li><a href="#">sub menu item 2</a></li>
+                  <li><a href="#">sub menu item 3</a></li>
+                  <li><a href="#">sub menu item 4</a></li>
+                </ul>
+            </li>
+            <li><a href="#">item 4</a></li>
+            <li><a href="#">item 5</a></li>
+          </ul>
+      </nav>
+    </header>
+    <div id="wrapper">
+      <div class="main col">
+        <h3>The Project</h3>
+        <p> Using what I have learned from my HTML, CSS, JavaScript and JQuery classes, build a drop down menu. I used incremental development and test driven design during the Project.</p>
+        <h3> Current Phase</h3>
+        <p>A semi-responsive menu as the task was just to build a JQuery drop down menu.</p>
+      </div>
+
+      <div class="secondary col">
+        <h3>Responsive Web</h3>
+        <p> Why responsive web design? It is estimated that by the end of 2014, 1.75 billion people will own mobile devices.</p>
+      </div>
+
+      <footer id="footer">       <div class="non-mobile">
+          <div class="site-nav">Menus<br>
+            <ul>
+              <li><a href="Jquery_menu.html">Current Page</a></li>
+              <li><a href="#">Nil</a></li>
+              <li><a href="gw2_main.html">Advanced</a></li>
+            </ul>
+          </div>
+          <div class="site-nav">Resources<br>
+            <ul>
+              <li><a href="http://tnw.to/r3N6j">Free</a></li>
+              <li><a href="#">TBD</a></li>
+            </ul>
+          </div>
+          <div class="site-nav">About<br>
+            <ul>
+              <li><a href="#">There</a></li>
+              <li><a href="#">is</a></li>
+              <li><a href="#">no</a></li>
+              <li><a href="#">Spoon</a></li>
+            </ul>
+          </div>
+          <div class="site-nav">Contact<br>
+            <ul>
+              <li><a href="#">Email</a></li>
+              <li><a href="#">Phone</a></li>
+              <li><a href="#">Twitter</a></li>
+              <li><a href="#">Facebook</a></li>
+            </ul>
+          </div>
+        </div>
+        <a href="http://twitter.com/jackblankensh13"><img src="img/twitter-wrap.png" alt="Twitter Logo" class="social-icon"></a>
+        <a href="http://facebook.com/jack.blankenship.942"><img src="img/facebook-wrap.png" alt="Facebook Logo" class="social-icon"></a>
+        <p>&copy; 2015 Jack Blankenship.</p>
+      </footer>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('.myMenu > li').bind('mouseover', openSubMenu);
+        $('.myMenu > li').bind('mouseout', closeSubMenu);
+        
+        function openSubMenu() {
+          $(this).find('ul').css('visibility', 'visible');  
+        };
+        
+        function closeSubMenu() {
+          $(this).find('ul').css('visibility', 'hidden'); 
+        };
+               
+      });
+    </script>
+    
+  </body>
+</html>

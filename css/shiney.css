@@ -3,7 +3,7 @@ ul {
     list-style-type:none;
     margin:0;
     padding:0;
-    position: absolute;
+    position: absolute; 
 
 }
 
@@ -96,7 +96,24 @@ input[type=checkbox]:checked ~ #menu{
     display: block;
 }
 
+#wrapper {
+ /* left: clear; */
+  max-width: 940px;    
+  margin: 1em auto;
+  padding: 0 5%;
+  display: block;
+}
 
+.logo {
+  display: inline-block;
+  color: #fff;
+  text-decoration: none;
+  background: #34495E;
+  text-align: center;
+}
+#main-menu{
+  height: 50px;
+}
 /*Responsive Styles*/
 
 @media screen and (max-width : 760px){
@@ -117,4 +134,33 @@ input[type=checkbox]:checked ~ #menu{
     .show-menu {
         display:block;
     }
+    .logo {
+      float: right;
+    }
+
+}
+
+@media all and (min-width: 481px) {
+
+  .col {
+    float: left;
+  }
+  .main {
+    width: 65.957446808511%;
+  }
+  .secondary {
+    width: 31.914893617021%; 
+    margin-left: 2.127659574468%;
+  }
+}
+@media only screen and (min-width: 769px) { 
+
+  .main {
+    width: 40.425531914894%;
+  }
+  .extra {
+    display: block;
+    margin-left: 2.127659574468%;
+    width: 23.404255319149%;
+  }
 }
