@@ -57,6 +57,16 @@ ul.myMenu {
 	background-color: #88a4d8;
 	color: white;
 }
+.single-slide {
+	height: 150px;
+	background-color: #ffdea1;
+}
+.top-slide, .bot-slide {
+	height: 75px;
+}
+.top-slide {
+	border-bottom: 1px solid #fff;
+}
 @media all and (max-width: 650px) {
 	nav ul {
       margin: 0 0;

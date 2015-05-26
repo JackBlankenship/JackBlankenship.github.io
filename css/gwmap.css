@@ -20,7 +20,7 @@
 	top: 55px;
 }
 #content {
-	height: 820px;
+	height: 900px;
 	/* border: 1px solid blue; background-color: #eee; */
 	font-family: 'Playfair Display', serif;
 }
@@ -103,12 +103,14 @@
 		height: 600px;
 	}
 
-
 }
 @media screen and (min-width: 650px) {
 	#blog {
 		display: inline-block;
 		width: 100%;
+	}
+		#content {
+		height: 820px;
 	}
 	/* #right-side-bar {
 		display: inline-block;

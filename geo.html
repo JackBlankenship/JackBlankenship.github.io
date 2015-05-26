@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Geolocation Demo</title>  
+  <meta name="viewport" content="initial-scale=0.60">
+  <link rel="stylesheet" href="css/geo.css">
+</head>
+<body>
+  <div id="error">You need JavaScript enabled for this application to work!</div>
+  <p id="hud">Aquiring Location<br /><img src="img/bar.gif" alt="Progress bar"></p>
+  <div id="restaurants">
+  
+    <h1>Chalkers' Favourite Burger Joints</h1>
+    <ul>
+        <li><span data-lat="45.5340308" data-lon="-122.660429">? miles</span> McDonalds</li>
+        <li><span data-lat="45.5500963" data-lon="-122.6757196">? miles</span> Little Big Burger</li>
+        <li><span data-lat="45.5730307" data-lon="-122.5584282">? miles</span> Original Wow Burger</li>
+        <li><span data-lat="45.573617"  data-lon="-122.5594743">? miles</span> Red Robin</li>
+      
+    </ul>
+
+</div>
+  
+  <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="js/distanceCalculator.js"></script>
+  <script src="js/geolocation.js"></script>
+</body>
+</html>
