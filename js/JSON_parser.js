@@ -4,7 +4,7 @@ var arrayOfKeys = [];
 var arrayOfKeysDebug = [];
 var arrayOfObjects = [];
 var arrayOfObjectsStack = [];
-var arrayOfStarts = [], arrayOfVariables = [], arrayOfCode = [];
+var arrayOfStarts = [], arrayOfVariables = [], arrayOfReferences = [], arrayOfCode = [];
 var myDebug = false, myMinIdx = 0, myMaxIdx = 0;
 var iTemp, lastKey, twoChars;
 
@@ -36,7 +36,7 @@ function getNextKey(kString, parentKey, kPointer) {
           keyAdded = addToKeyArray(myKey);
         } else {
           keyAdded = addToKeyArray(parentKey + '.' + myKey); 
-        }  // end parentkey check
+        }  // end parentKey check
         rArray.push(endIdx);
         rArray.push('normal');
         rArray.push(myKey);
@@ -68,11 +68,11 @@ function getNextKey(kString, parentKey, kPointer) {
   gblBeginIndex = begIdx;
   gblCurrentIndex = kPointer;
   return rArray;
-} // end getNextKey function returns rArray[ begIdx, endIdx, data-type, key, parentKey ]
+} // end getNextKey function returns rArray[ begIdx, endIdx, data-type, key, parentKey, keyAdded ]
 
 function getNextValue(kString, parentKey, currentKey, kPointer, currentKeys, keyAdded) {
   var rArray = [];
-  var begIdx, endIdx, myKey, kLength, kChar, kObject, tIdx, singularKey, singularParent, joinedKey;
+  var begIdx, endIdx, myKey, kLength, kChar, kObject, tIdx, singularKey, singularParent, joinedKey, joinedVariable;
   begIdx = kPointer + 1;
 //  console.log("NextValue entry string position " + begIdx + " value " + kString.charAt(begIdx));
   rArray.push (begIdx);
@@ -81,21 +81,30 @@ function getNextValue(kString, parentKey, currentKey, kPointer, currentKeys, key
  //  console.log("NextValue, examined string is " + kChar);
  // }
   // Unhandled data exception on ]},.
+  if (keyAdded) {
+    singularKey = getSingularFromPlural(currentKey);
+    if (parentKey) {
+      singularParent = getSingularFromPlural(parentKey);
+    } else {
+      singularParent = "data";
+    }
+    joinedVariable = singularParent + "_" + currentKey;
+    arrayOfVariables.push(joinedVariable);
+    joinedKey = singularParent + "." + currentKey; 
+    arrayOfReferences.push(joinedVariable + " = " + joinedKey);
+  }
+
   if (kChar ==='[{') {
     endIdx = begIdx + 1;
     kObject = 'arrayOfObjects';
     arrayOfStarts.push(parentKey + " " + " " + currentKeys + " " +kChar); // This might be a push of just the kChar.charAt(1)
     if (keyAdded) {
       console.log("Parent:" + parentKey + " currentKey:" + currentKey);
-      singularKey = getSingularFromPlural(currentKey);
-      if (parentKey) {
-        singularParent = getSingularFromPlural(parentKey);
-      } else {
-        singularParent = "data";
-      }
-      joinedKey = singularParent + "." + currentKey;
+      
       arrayOfCode.push("for (i=0, il=" + joinedKey + ".length; i<il; i++) {" ); 
       arrayOfCode.push(" " + singularKey + " = " + joinedKey +"[i];");
+      arrayOfReferences.pop(); // remove prior added
+      arrayOfVariables.pop();
       // for (i = 0, il = gameMap.points_of_interest.length; i < il; i++) {
       //          poi = gameMap.points_of_interest[i];
     }
@@ -104,9 +113,15 @@ function getNextValue(kString, parentKey, currentKey, kPointer, currentKeys, key
     kChar = kString.substr(begIdx,3);       //handle null arrays
     if (kChar === '[]}') {
       arrayOfKeys.pop();
+    } else {                          // logic to change variable to be array.
+      if (keyAdded) {
+        joinedVariable = joinedVariable + '[]';
+        arrayOfVariables.pop();
+        arrayOfVariables.push(joinedVariable);
+      }
     }
 
-    endIdx = kString.indexOf(']', begIdx); // ERROR this '],' fails on char 385
+    endIdx = kString.indexOf(']', begIdx); // ERROR this '],' fails on char 385????
 
     if (myDebug === true) {
       if (begIdx > myMinIdx && begIdx < myMaxIdx) {
@@ -145,7 +160,9 @@ function getNextValue(kString, parentKey, currentKey, kPointer, currentKeys, key
       }
       joinedKey = singularParent + "." + currentKey;
       arrayOfCode.push("for (" + singularKey + " in " + joinedKey + ") {" ); //for (region in data.regions) { region = data.regions[region];
-      arrayOfCode.push(" { " + singularKey + " = " + joinedKey + "[" + singularKey + "];");
+      arrayOfCode.push(" " + singularKey + " = " + joinedKey + "[" + singularKey + "];");
+      arrayOfReferences.pop(); // remove as prior line added code 
+      arrayOfVariables.pop();
     }
     if (endIdx > 0) {
       if (kString.substr((endIdx),2) !== ":{") { // Single object encountered @treehouse.com
@@ -171,9 +188,19 @@ function getNextValue(kString, parentKey, currentKey, kPointer, currentKeys, key
           kObject = "endOfArrayOfObjects";
         }
       }
-      if (endIdx> 1148 && endIdx < 1190) {
-          console.log("GetNextValue string:" + kString.substr(endIdx,40));
-          console.log("small string:" + kChar);
+      //if (endIdx> 1148 && endIdx < 1190) {
+      //    console.log("GetNextValue string:" + kString.substr(endIdx,40));
+      //    console.log("small string:" + kChar);
+      //}
+    }
+    // add logic using tIdx to look for },{ which is still normal else single '},"' which is an endOfObject
+    tIdx = kString.indexOf(',', endIdx);
+    if (tIdx > 0) {
+      kChar = kString.substr((tIdx - 1), 3);
+      if (kChar === '},"' ) {
+        //console.log("endOfObject detected: "+ kChar);
+        kObject = "endOfObject";
+        endIdx = tIdx; // needed to continue processing correctly
       }
     }
   }
@@ -215,12 +242,13 @@ function getSingularFromPlural(currentKey) {
 function haveAnObject(oString, parentKey, strPointer, loopLimit) {
   var arrayOfValues = [0,0,'normal'];
   var currentKeys = [];
-  var myKey, haoIdx, haoTermIdx, haoString;
+  var myKey, haoIdx, haoTermIdx, haoString, haokeyAdded = false;
   if (parentKey !== false) {
     // attempt to prevent duplicate entires as I have not figured out how to bypass duplicate
     // data objects in getNextValue logic when object end is detected.
     if (arrayOfObjects.indexOf(parentKey) < 0 ) { 
       arrayOfObjects.push(parentKey);
+      haokeyAdded = true;
     }
     if (arrayOfObjectsStack.indexOf(parentKey) < 0) {  
       arrayOfObjectsStack.push(parentKey); // stack of the objects we are processing
@@ -230,6 +258,7 @@ function haveAnObject(oString, parentKey, strPointer, loopLimit) {
 
   do {
     arrayOfValues = getNextKey(oString, parentKey, strPointer);
+    //NO! haokeyAdded = arrayOfValues[5];
     console.log("Post getNextKey " + arrayOfValues);
 
     if (arrayOfValues[1] > 928 && arrayOfValues[1] < 1190) {
@@ -260,8 +289,14 @@ function haveAnObject(oString, parentKey, strPointer, loopLimit) {
   console.log("Full arrayOfValues:" + arrayOfValues);
   }
 
-  if (arrayOfValues[2] === 'endOfArrayOfObjects') {
+  if ((arrayOfValues[2] === 'endOfArrayOfObjects') || ( arrayOfValues[2] === 'endOfObject')) {
     console.log("Pre arrayOfObjectsStack pop:" + arrayOfObjectsStack);
+    if (haokeyAdded === true) { //key was added
+      // arrayOfCode.push("} // terminator for " + parentKey + "." + myKey);
+      arrayOfCode.push("} // terminator for " + arrayOfObjectsStack[(arrayOfObjectsStack.length - 2)] + "." + arrayOfObjectsStack[(arrayOfObjectsStack.length - 1)]); //array zero based math
+    } else {
+      console.log("haokeyAdded:" + haokeyAdded + " parentKey:" + parentKey + " myKey:" + myKey);
+    }
     arrayOfObjectsStack.pop(); // remove the current object
     console.log("Post arrayOfObjectsStack pop:" + arrayOfObjectsStack);
     console.log("Simulated parentKey is:" + arrayOfObjectsStack[(arrayOfObjectsStack.length - 1)]);
@@ -335,7 +370,7 @@ $(document).ready(function() {
   
   var flickerAPI = "https://api.guildwars2.com/v1/map_floor.json?continent_id=1&floor=1";
   // flickerAPI = "http://teamtreehouse.com/jackblankenship.json";
-  //flickerAPI =  "http://us.battle.net/api/wow/realm/status?callback=?";
+  //flickerAPI =  "http://us.battle.net/api/wow/realm/status?jsonp=?";
 
 
   $('form').submit(function (evt) {
@@ -365,19 +400,48 @@ $(document).ready(function() {
       //var arrayOfStrings = myString.split(","); space or , won't work due to text data.
       console.log("Keys found:\n" + arrayOfKeys);
       console.log("\nObjects found:\n" + arrayOfObjects);
-      //console.log("\nStarts found:\n" + arrayOfStarts);
+      //console.log("\nReferences:\n" + arrayOfReferences);
 
+      while (arrayOfObjectsStack.length > 1 ) {
+        arrayOfCode.push("} // terminator for " + arrayOfObjectsStack[(arrayOfObjectsStack.length - 2)] 
+                                          + "." + arrayOfObjectsStack[(arrayOfObjectsStack.length - 1)]); //array zero based math
+        arrayOfObjectsStack.pop();
+      } 
      
+      arrayOfCode.push("} // terminator for data." + arrayOfObjectsStack[0]); //array zero based math     
       var myContent = "";
       console.log(arrayOfKeys.length);
-      for ( var i=0; i < arrayOfKeys.length; i++) {
-        myContent = myContent + arrayOfKeys[i] + "\n";
+
+      for ( var i=0; i < arrayOfVariables.length; i++) {
+        myContent = myContent + arrayOfVariables[i] + "\n";
       }
+      document.getElementById("tvariables").value = myContent;
+       
+
+      myContent = "";
+      for ( var i=0; i < arrayOfReferences.length; i++) {
+        myContent = myContent + arrayOfReferences[i] + "\n";
+      }
+      document.getElementById("treferences").value = myContent; 
+ 
+
+      myContent = "";
+      myContent = myContent + '$.getJSON("' + flickerAPI + '", function (data) {\n';
       for ( var j=0; j< arrayOfCode.length; j++){
         myContent = myContent + arrayOfCode[j] + "\n";
       }
-      //console.log(myContent);
-      document.getElementById("textarea").textContent = myContent; 
+      myContent = myContent + '});';
+      
+      document.getElementById("textarea").value = myContent;
+
+      //reset all arrays
+      arrayOfCode =[];
+      arrayOfReferences = [];
+      arrayOfVariables = [];
+      arrayOfKeys = [];
+      arrayOfValues = [];
+      arrayOfObjects = [];      
+
       $searchField.prop("disabled", false);
       $submitButton.attr("disabled", false).val("Parse");
     })

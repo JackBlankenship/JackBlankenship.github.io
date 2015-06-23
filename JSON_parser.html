@@ -41,15 +41,13 @@
       <div class="main col">
         <h3>Description</h3>
         <p> This will take an input that returns a JSON object and parses out information.</p>
-        <h3>Phase I</h3>
-        <p> Calls the GuildWars 2 map V1 API. Objects now have multiple objects and code needs modification to handle that condition.</p>
-        <h3>Phase II (future)</h3>
-        <p> Takes the parsed data and builds a base javascript.</p>
+        <p> The default calls the GuildWars 2 map V1 API, otherwise an attempted call to the URL you provide.
+          A successful call parses the data and builds a base javascript with variables and additional code.</p>
       </div> 
       <div class="secondary col">
-        <h3>Data Entry below</h3>
+        <h3>URL Entry below</h3>
             <form>
-              <label for="search">Phase II (future)</label>
+              <label for="search">URL:</label>
               <input type="search" name="search" id="search">
               <input type="submit" value="Parse" id="submit">
              
@@ -57,12 +55,15 @@
       </div>
 
       <div class="extra col">
-        <h3>Change log</h3>
-        <p>Feb. 19 2015 - Initial test.</p>
+        <h3>Current Status</h3>
+        <p>Still a JSON newbie and finding features to enhance/fix.</p>
       </div>
       <div class="bottom col">
-          <h3>Returned values</h3>
-           <textarea name="textarea" id="textarea" rows="10" cols="25"></textarea>
+          <h3>Suggested JavaScript</h3>
+           <textarea name="textarea" id="textarea" rows="10" cols="90"></textarea>
+           <h3>Suggested variables<h3>
+            <textarea name="tvariables" id="tvariables" rows="10" cols="30"></textarea>
+            <textarea name="treferences" id="treferences" rows="10" cols="55"></textarea>
       </div>
       <footer>
         <div class="non-mobile">

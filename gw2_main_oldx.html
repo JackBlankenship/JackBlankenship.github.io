@@ -2,22 +2,216 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>Guildwars 2 map</title>
-  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>JQMenu Example</title>
+  <link href='http://fonts.googleapis.com/css?family=Playfair+Display|Arimo' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="css/jqmenu_adv.css">
   <link rel="stylesheet" href="css/gwmap.css" />
+  <style>
+    #cssmenu {
+      position: relative;
+      top: 1px;
+      margin: auto;
+    }
+  </style>
 </head>
 <body>
-  <header class="logo">
-    <div class="logo-left"></div>
-    
-  </header>
-  <div class="nav">Secondary Nav bar to go here</div>
-  <div id="map" class="map leaflet-container"> 
-  
+
+<div id="cssmenu">
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li>
+      <a href="#">Game</a>
+      <ul>
+        <li>
+          <a href="#">Races of Tyria</a>
+          <ul>
+            <li><a href="#">Asura</a></li>
+            <li><a href="#">Sylvari</a></li>
+            <li><a href="#">Human</a></li>
+            <li><a href="#">Norn</a></li>
+            <li><a href="#">Charr</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">Professions</a>
+          <ul>
+            <li><a href="#">Engineer</a></li>
+            <li><a href="#">Necromancer</a></li>
+            <li><a href="#">Thief</a></li>
+            <li><a href="#">Elementalist</a></li>
+            <li><a href="#">Warrior</a></li>
+            <li><a href="#">Ranger</a></li>
+            <li><a href="#">Mesmer</a></li>
+            <li><a href="#">Guardian</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Combat</a></li>
+        <li><a href="#">Dungeons</a></li>
+        <li><a href="#">Dynamic Events</a></li>
+        <li><a href="#">Personal Story</a></li>
+        <li><a href="#">Competitive Play</a></li>
+
+      </ul>
+    </li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</div>
+<div class="logo">
+  <div class="logo-left"></div>
+</div>
+<div class="page-width">
+<div id="content">
+  <div id="blog">
+    <h4>NEWS</h4>
+    <ul class="news">
+     <li class="mod">
+      <div class="meta">
+        <p class="day">
+            11        </p>
+        <p class="mon">
+            Mar        </p>
+      </div>
+      <div class="bd">
+        <h3>
+          <a class="more-arr" href="https://www.guildwars2.com/en/news/introducing-the-guildwars2-world-tournament-seriesboston-champions/" title="" rel="bookmark">
+                Introducing the Guild&nbsp;Wars&nbsp;2 World Tournament Series&mdash;Boston Champions            </a>
+        </h3>
+        <div class="text">
+          <p>The dust has settled, and five champions have emerged victorious.</p>
+          <p class="more"><a href="https://www.guildwars2.com/en/news/introducing-the-guildwars2-world-tournament-seriesboston-champions/">Read More</a></p>
+        </div>
+      </div>
+    </li> 
+    <li class="mod">
+      <div class="meta">
+        <p class="day">
+            10        </p>
+        <p class="mon">
+            Mar        </p>
+      </div>
+      <div class="bd">
+        <h3>
+          <a class="more-arr" href="https://www.guildwars2.com/en/news/join-us-at-egx-rezzed-and-play-guildwars2-heartofthorns/" title="" rel="bookmark">
+                Join Us at EGX Rezzed and Play Guild&nbsp;Wars&nbsp;2: Heart&nbsp;of&nbsp;Thorns!            </a>
+        </h3>
+        <div class="text">
+          <p>Fans in London are getting hands-on time with the expansion, and ArenaNet will also reveal the future of WvW at Rezzed.</p>
+          <p class="more"><a href="https://www.guildwars2.com/en/news/join-us-at-egx-rezzed-and-play-guildwars2-heartofthorns/">Read More</a></p>
+        </div>
+      </div>
+    </li>
+    <li class="mod">
+      <div class="meta">
+        <p class="day">
+            06        </p>
+        <p class="mon">
+            Mar        </p>
+      </div>
+      <div class="bd">
+        <h3>
+           <a class="more-arr" href="https://www.guildwars2.com/en/news/upcoming-heart-of-thorns-closed-beta-tests/" title="" rel="bookmark">
+                Upcoming Heart of Thorns closed beta tests            </a>
+        </h3>
+        <div class="text">
+          <p>Can&#8217;t make it to PAX East or Rezzed for the first Guild&nbsp;Wars&nbsp;2 expansion demos? Closed beta tests are right around the corner!</p>
+          <p class="more"><a href="https://www.guildwars2.com/en/news/upcoming-heart-of-thorns-closed-beta-tests/">Read More</a></p>
+        </div>
+      </div>
+    </li>
+    <li class="mod">
+      <div class="meta">
+        <p class="day">
+            06        </p>
+        <p class="mon">
+            Mar        </p>
+      </div>
+      <div class="bd">
+        <h3>
+          <a class="more-arr" href="https://www.guildwars2.com/en/news/limited-time-offer-save-75-on-guildwars2-through-march8/" title="" rel="bookmark">
+                Limited Time Offer: Save 75% on Guild&nbsp;Wars&nbsp;2 through March&nbsp;8!            </a>
+        </h3>
+        <div class="text">
+          <p><em>Guild&nbsp;Wars&nbsp;2</em>, 75% off now through March 8.</p>
+          <p class="more"><a href="https://www.guildwars2.com/en/news/limited-time-offer-save-75-on-guildwars2-through-march8/">Read More</a></p>
+        </div>
+      </div>
+    </li>
+    <li class="mod">
+      <div class="meta">
+        <p class="day">
+            06        </p>
+        <p class="mon">
+            Mar        </p>
+      </div>
+      <div class="bd">
+        <h3>
+          <a class="more-arr" href="https://www.guildwars2.com/en/news/its-time-for-the-world-tournament-seriesboston-finals/" title="" rel="bookmark">
+                It&#8217;s Time for the World Tournament Series&mdash;Boston Finals            </a>
+        </h3>
+        <div class="text">
+          <p>North America, Europe, and China will enter the arena this Saturday&mdash;who do you stand behind?</p>
+          <p class="more"><a href="https://www.guildwars2.com/en/news/its-time-for-the-world-tournament-seriesboston-finals/">Read More</a></p>
+        </div>
+      </div>
+    </li>   
   </div>
-  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <div id="right-side-bar" class="yui3-u">
+    <ul>
+      <li> 
+        <div class="widget mod-main">
+        <div class="buy-now bd">
+        <a href="http://buy.guildwars2.com">
+            <span class="eason splash">
+                <strong>BUY</strong> <br>NOW            </span>
+        </a>
+      </div>
+        </div>
+      </li>
+      <li id="gw2_sidebar-link-two-part-26" class="widget-container widget-gw2-sidebar-link-two-part">
+        <div class="widget widget-wide mod mod-main">
+          <div class="bd eason">
+            <a href="https://heartofthorns.guildwars2.com/">
+              <img src="https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/2015/01/f347d2015-01_Expansion_Sidebar.jpg" alt="Announcing the First Guild Wars 2 Expansion" />
+            </a>
+            <p>
+            Announcing the First Guild Wars 2 Expansion        </p>
+            <a href="https://heartofthorns.guildwars2.com/" class="more">
+            LEARN MORE        </a>
+          </div>
+        </div>
+      </li>
+      <li id="gw2_sidebar-video-2" class="widget-container widget-gw2-sidebar-video"><div class="widget widget-wide mod mod-main">
+    <div class="bd videos media-listing">
+        <a href="http://www.youtube.com/watch?v=9XnB0e9UONo" class="yulb-launcher no-index lb-video video media-item" data-vidid="9XnB0e9UONo" data-vidwidth="615" data-vidheight="344">
+        <img src="https://d3b4yo2b5lbfy.cloudfront.net/wp-content/uploads/2012/08/sidebar-video.jpg" />
+      </a>
+        <p class="eason">
+          What is Guild Wars 2?        </p>
+        <a href="http://www.youtube.com/watch?v=9XnB0e9UONo" class="yulb-launcher no-index more eason lb-video media-item" data-vidid="9XnB0e9UONo" data-vidwidth="615" data-vidheight="344">
+            Watch the Video        </a>
+    </div>
+</div></li>
+    </ul>
+
+  </div>
+</div>
+</div>
+
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/jqmenu_adv.js"></script>
+  
+
   <script src="js/gwmap2.js"></script>
+
+<script type="text/javascript">
+  $("#cssmenu").menumaker({
+    title: "Menu",
+    format: "multitoggle"
+  });
+</script>
+
 </body>
 </html>
