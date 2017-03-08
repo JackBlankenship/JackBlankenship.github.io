@@ -44,8 +44,8 @@ const idOtherTitleError = "#other-titleError";
 const idEMail = "#mail";
 const idTotalCost = '#totalcost';
 const classActivities = '.activities';
+const paymentDomExclusion = [idCreditCard, idPaypal, idBitcoin, idPaymentError];
  
-
 //* --------------------- *//
 //* DOM variables         *//
 //* --------------------- *//
@@ -99,9 +99,10 @@ const $activityError = $("#activityError");
 $activityError.css("color", "maroon");			// set color to maroon for visibility
 $activityError.hide();
 
-$(idPaypal).hide();
-$(idBitcoin).hide();
-$(idPaymentError).hide();
+setPaymentDomExclusion(idCreditCard);
+//$(idPaypal).hide();
+//$(idBitcoin).hide();
+//$(idPaymentError).hide();
 $('[name=user_payment]').val('credit card');	// set credit card as default payment selection.
 
 setConflictTimes();
@@ -220,27 +221,31 @@ function getTwentyFourHour(twelveHour) {
 	}
 	 return twentyFour;
 };
-
+function validateCvv () {
+ 	var nCVV = Number($(idCVV).val()).toString();
+ 	if (nCVV.length === 3) {
+		paymentValid = true;
+		$(idPaymentError).hide();
+		setInputBorder( $(idCVV), inputCssBorder);	
+		ReadyForSubmit();
+	} else {
+		$(idPaymentError).text(lPaymentErrorCVV);
+		$(idPaymentError).show();
+		setInputBorder( $(idCVV), inputCssBorderError);
+		$(idCVV).focus();
+	}
+}
 function validateCardInfo () {
 
  	paymentValid = false;
  	var nCCnum = Number($(idCCNum).val()).toString();
  	var nZip = Number($(idZip).val()).toString();
- 	var nCVV = Number($(idCVV).val()).toString();
+
  	if ( (nCCnum.length >= 13) && (nCCnum.length <= 16) ) {
  		setInputBorder( $(idCCNum), inputCssBorder);
 		if (nZip.length === 5) {
 			setInputBorder( $(idZip), inputCssBorder);
-			if (nCVV.length === 3) {
-				paymentValid = true;
-				$(idPaymentError).hide();
-				setInputBorder( $(idCVV), inputCssBorder);	
-			} else {
-				$(idPaymentError).text(lPaymentErrorCVV);
-				$(idPaymentError).show();
-				setInputBorder( $(idCVV), inputCssBorderError);
-				$(idCVV).focus();
-			}
+			validateCvv();
 		} else {
 			$(idPaymentError).text(lPaymentErrorZip);
 			$(idPaymentError).show();
@@ -259,35 +264,50 @@ function validateCardInfo () {
 function ReadyForSubmit() {
 	console.log("check ready");
 	validName = verifyName();
+	formValid = true;
+
+
+	if (paymentValid) {
+	} else {
+		if (emailValid && activityValid && validName) {
+			console.log("card validate time.");
+			if ( $(idPayment).val() == "credit card") {
+				validateCardInfo();
+			}
+		}	
+		formValid = false;
+	};
+
+	if (activityValid) {
+		$activityError.hide();
+	} else {
+		$activities[0].focus();
+		console.log("activities focus")
+		$activityError.show();	
+	};
+
+	if (emailValid) {
+	} else {
+		$eMailError.show();
+		setInputBorder($eMail, inputCssBorderError);
+		$eMail.focus();
+		console.log("email focus");
+		formValid = false;
+	};
 
 	if (validName) {
 		$idNameError.hide();
-		if (emailValid) {
-			if (paymentValid) {
-				if (activityValid) {
-					$activityError.hide();
-// popup something or
-					formValid = true;
-					$('button').focus();
-				} else {
-					$activities[0].focus();
-					$activityError.show();	
-				}
-			} else {
-				validateCardInfo();
-				formValid = false;
-			}
-		} else {
-			$eMailError.show();
-			setInputBorder($eMail, inputCssBorderError);
-			$eMail.focus();
-			formValid = false;
-		}
 	} else {
 		$(idName).focus();
 		$idNameError.show();
+		console.log("name focus");
 		formValid = false;
-	}	
+	};
+
+	if (formValid) {
+		$('button').focus();
+	};
+	
 };
 
 function verifyName() {
@@ -305,6 +325,15 @@ function verifyName() {
 function setInputBorder(domElement, style) {
 	domElement.css("border", style);
 }
+function setPaymentDomExclusion (showDom) {
+	for (let i=0; i< paymentDomExclusion.length; i++) {
+		if (showDom === paymentDomExclusion[i]) {
+			$(paymentDomExclusion[i]).show();
+		} else {
+			$(paymentDomExclusion[i]).hide();
+		}
+	}
+};
 //* --------------------- *//
 //*  Events  section      *//
 //* --------------------- *//
@@ -393,38 +422,28 @@ $('.activities').on('change', ':checkbox', function () {
     	activityValid = false;
     	$activityError.show();
     }
-    ReadyForSubmit();				// error check the rest of the form.
 });
 
 $(idPayment).change( function() {
 //	const paymentType = $(this).val();
 
 	if ($(this).val() == "credit card") {
-		$(idCreditCard).show();
-		$(idPaypal).hide();
-		$(idBitcoin).hide();
-		$(idPaymentError).hide();
+		setPaymentDomExclusion(idCreditCard);
 		$(idCCNum).focus();
+		validateCardInfo();
 	} else 	if ($(this).val() == "paypal") {
-		$(idCreditCard).hide();
-		$(idPaypal).show();
-		$(idBitcoin).hide();
-		$(idPaymentError).hide();
+		setPaymentDomExclusion(idPaypal);
 		paymentValid = true;
-		ReadyForSubmit();
 	} else 	if ($(this).val() == "bitcoin") {
-		$(idCreditCard).hide();
-		$(idPaypal).hide();
-		$(idBitcoin).show();
-		$(idPaymentError).hide();
+		setPaymentDomExclusion(idBitcoin);
 		paymentValid = true;
-		ReadyForSubmit();
 	} else {
 		$(idPaymentError).text(lPaymentErrorSelect);
 		$(idPaymentError).show();
 		paymentValid = false;
 	}
-	
+
+	ReadyForSubmit();
 });
 
 $(idCreditCard).blur( function () {
@@ -441,15 +460,22 @@ $(idCCNum).blur( function () {
 			$(idPaymentError).text(lPaymentErrorNoCard);
 			$(idPaymentError).show();
 			setInputBorder( $(idCCNum), inputCssBorderError);
+			console.log("ccnum blur");
 			$(idCCNum).focus();
 		}
 	}
 });
 
 //$(idZip).blur( function () { });
-
+$(idCVV).keyup( function(){
+	validateCvv();
+})
 $(idCVV).blur( function () {
 	validateCardInfo();
+	console.log("cvv blur");
+	if (paymentValid) {
+		$('button').focus();
+	}
 });
 
 //$eMail.change( validateEmail('change'));
