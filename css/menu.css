@@ -1,0 +1,74 @@
+#logo {
+  text-align: center;
+  margin: 0;
+  background-color: #b0d0ff;
+  border-bottom: 5px solid #3888ff;
+}
+
+ul.egmenu {  
+/*   background: #b0d0ff; too light */
+    background: #a1c1ff;
+    height: 30px;
+    width: 100%; 
+}
+
+ul.egmenu > li { 
+    float: left; 
+    position: relative;  
+}
+
+ul.egmenu ul {
+    background: #75acff; 
+    display: none; 
+    position: absolute;
+    left: 0; top: 100%;
+}
+
+ul.egmenu a { 
+    cursor: pointer; 
+    display: block; 
+    color: white; 
+    line-height: 30px; 
+    padding: 0 10px; 
+}
+.egmenu li ul li a:link  {
+  width:auto;
+}
+ul.egmenu li { list-style: none; }
+ul.egmenu li a:hover {
+  background-color:#ffaf38; 
+}
+ul.egmenu li:hover { background:  #ffaf38; /* #75acff */;  
+                   /*   border-top: 2px solid #ffaf38; */  
+                 }
+/* .egmenu li ul li:hover {
+  background-color:#ffaf38; 
+} */ 
+ul.egmenu li:hover ul { display: block;  }
+/* #b0d0ff */
+
+@media all and (max-width: 480px) {
+  /* remove margins on phones */
+    header {
+        float: none;
+    }
+    nav ul {
+      margin: 0 0;
+    }
+    ul.egmenu {  height: auto; }
+    ul.egmenu > li {  float: none; 
+                      width: 100%; 
+                    background: #a1c1ff;}
+    ul.egmenu > li a ul {  float: none; width: 100%; }
+    ul.egmenu a { line-height: 40px; }
+    ul.egmenu ul { position: relative; }
+
+
+    ul.egmenu li.hover { background: lightblue;  }
+    ul.egmenu li.tap { background: lightblue;  }
+    ul.egmenu li.tap ul { display: block;  }
+    li.has-sub ul li { background-color: #b0d0ff;
+                        border-top: 1px solid mediumblue;
+                        width: 100%  }
+  
+}

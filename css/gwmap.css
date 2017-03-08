@@ -102,14 +102,14 @@
 		border: 1px solid grey;
 		height: 600px;
 	}
-
 }
+
 @media screen and (min-width: 650px) {
 	#blog {
 		display: inline-block;
 		width: 100%;
 	}
-		#content {
+	#content {
 		height: 820px;
 	}
 	/* #right-side-bar {

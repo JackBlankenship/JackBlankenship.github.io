@@ -1,0 +1,36 @@
+
+@media screen and (min-width:420px) and (max-width:640px) {
+  /* overflow issue on iPad 2 landscape mode */
+    .quote {
+    font-size: 3rem;
+  }
+  .quote:before, .quote:after {
+    font-size: 4rem;
+  }
+  .source {
+    font-size: 1.25rem;
+  }
+}
+/* Handle older mobile devices */
+@media (max-width: 375px) {
+  .quote {
+    font-size: 2rem;
+  }
+  .quote:before, .quote:after {
+    font-size: 2.5rem;
+  }
+  .source {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 320px) {
+  .quote {
+    font-size: 1.5rem;
+  }
+  .quote:before, .quote:after {
+    font-size: 2.3rem;
+  }
+  .source {
+    font-size: 1rem;
+  }
+}

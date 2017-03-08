@@ -4,12 +4,14 @@ var arrayOfKeys = [];
 var arrayOfKeysDebug = [];
 var arrayOfObjects = [];
 var arrayOfObjectsStack = [];
+var arrayOfObjectsStackIdx = [];
 var arrayOfStarts = [], arrayOfVariables = [], arrayOfReferences = [], arrayOfCode = [];
 var myDebug = false, myMinIdx = 0, myMaxIdx = 0;
 var iTemp, lastKey, twoChars;
 
 
 function getNextKey(kString, parentKey, kPointer) {
+
   var rArray = [];
   var begIdx, endIdx, myKey, kLength, keyAdded = false;
   begIdx = kString.indexOf('"',kPointer); // object ALWAYS starts with a name pair
@@ -17,8 +19,20 @@ function getNextKey(kString, parentKey, kPointer) {
 
   if (myDebug === true) {
     console.log("getNextKey begIdx "+ begIdx);
-    if (begIdx > myMinIdx && begIdx < myMinIdx){
+    if (begIdx > myMinIdx && begIdx < myMaxIdx){
       console.log(kString.substr(begIdx,75));
+    } else {
+      if (begIdx > myMaxIdx) {
+        myDebug = false;
+        console.log('---------  End range debug---------');
+      }
+    }
+  } else {
+    myMinIdx = 126717;
+    myMaxIdx = 144000;
+    if (begIdx > myMinIdx && begIdx < myMaxIdx) {
+      myDebug = true;
+      console.log('---------Begin range debug---------');
     }
   }
 
@@ -67,12 +81,15 @@ function getNextKey(kString, parentKey, kPointer) {
   gblEndIndex = endIdx;
   gblBeginIndex = begIdx;
   gblCurrentIndex = kPointer;
+  if (myKey === '1089') {
+    console.log("Bad key located. string started at:" + begIdx + " string ended at: " + endIdx);
+  }
   return rArray;
 } // end getNextKey function returns rArray[ begIdx, endIdx, data-type, key, parentKey, keyAdded ]
 
 function getNextValue(kString, parentKey, currentKey, kPointer, currentKeys, keyAdded) {
   var rArray = [];
-  var begIdx, endIdx, myKey, kLength, kChar, kObject, tIdx, singularKey, singularParent, joinedKey, joinedVariable;
+  var begIdx, endIdx, myKey, kLength, kChar, kObject, tIdx, singularKey, singularParent, joinedKey, joinedVariable, arrayDepth, arrayTerminator, tempBegIdx;
   begIdx = kPointer + 1;
 //  console.log("NextValue entry string position " + begIdx + " value " + kString.charAt(begIdx));
   rArray.push (begIdx);
@@ -89,18 +106,25 @@ function getNextValue(kString, parentKey, currentKey, kPointer, currentKeys, key
       singularParent = "data";
     }
     joinedVariable = singularParent + "_" + currentKey;
-    arrayOfVariables.push(joinedVariable);
-    joinedKey = singularParent + "." + currentKey; 
-    arrayOfReferences.push(joinedVariable + " = " + joinedKey);
+    // somehow the keyAdded is not working properly 08-10-2016
+    if (arrayOfVariables.indexOf(joinedVariable) < 0) { 
+      arrayOfVariables.push(joinedVariable);
+    }
+    joinedKey = singularParent + "." + currentKey;
+    if (arrayOfReferences.indexOf(joinedVariable)) { 
+      arrayOfReferences.push(joinedVariable + " = " + joinedKey);
+    }
+    // somehow the keyAdded is not working properly 08-10-2016 END
   }
+
+  // 08-10-2016 Guildwars2 feed breaking near character 126715 object sectors:[{"sector_id":1089,}]
+  //"skill_challenges":[],"sectors":[{"sector_id":1089,"name":"Dappled Shores","level":80,"coord":[13631.9,20072],
 
   if (kChar ==='[{') {
     endIdx = begIdx + 1;
     kObject = 'arrayOfObjects';
     arrayOfStarts.push(parentKey + " " + " " + currentKeys + " " +kChar); // This might be a push of just the kChar.charAt(1)
     if (keyAdded) {
-      console.log("Parent:" + parentKey + " currentKey:" + currentKey);
-      
       arrayOfCode.push("for (i=0, il=" + joinedKey + ".length; i<il; i++) {" ); 
       arrayOfCode.push(" " + singularKey + " = " + joinedKey +"[i];");
       arrayOfReferences.pop(); // remove prior added
@@ -109,20 +133,42 @@ function getNextValue(kString, parentKey, currentKey, kPointer, currentKeys, key
       //          poi = gameMap.points_of_interest[i];
     }
   } else if ( kChar.charAt(0) === '[') {
+    // 2016-08-18 An array of arrays gives an error 
+    arrayDepth = 0;
     kObject = 'normal';                    // add array function call?
     kChar = kString.substr(begIdx,3);       //handle null arrays
-    if (kChar === '[]}') {
-      arrayOfKeys.pop();
-    } else {                          // logic to change variable to be array.
+    arrayTerminator = ']';
+    if (kChar.charAt(1) ==='[') {
+      console.log("--String:" + kString.substr(begIdx,30));
+      endIdx = begIdx + 1; // zero based math fun.
+
+      do {
+        arrayDepth++;
+        endIdx++;
+        arrayTerminator = arrayTerminator + ']';
+      } while (kString.charAt(endIdx) === '[');
+      //console.log("--array terminator:" + arrayTerminator);
+      tempBegIdx = kString.indexOf(arrayTerminator) + arrayDepth;
       if (keyAdded) {
-        joinedVariable = joinedVariable + '[]';
-        arrayOfVariables.pop();
-        arrayOfVariables.push(joinedVariable);
+          joinedVariable = joinedVariable + '[]';
+          arrayOfVariables.pop();
+          arrayOfVariables.push(joinedVariable);
       }
+      console.log('--ending position string:' + kString.substr(tempBegIdx,10));
+    } else {
+      if (keyAdded) {
+        if ((kChar === '[]}') || (kChar === '[],')) {  // added check for empty array [],
+          arrayOfKeys.pop();
+        } else {                          // logic to change variable to be array.
+          joinedVariable = joinedVariable + '[]';
+          arrayOfVariables.pop();
+          arrayOfVariables.push(joinedVariable);
+        }
+      }
+      
     }
-
-    endIdx = kString.indexOf(']', begIdx); // ERROR this '],' fails on char 385????
-
+    endIdx = kString.indexOf(arrayTerminator, begIdx); // ERROR this '],' fails on char 385????
+    // having an issue with empty array skill_challenges before object of an array sectors.sector_id:1089
     if (myDebug === true) {
       if (begIdx > myMinIdx && begIdx < myMaxIdx) {
         console.log("Next charAt " + kString.charAt(endIdx));
@@ -132,6 +178,7 @@ function getNextValue(kString, parentKey, currentKey, kPointer, currentKeys, key
     do {
       endIdx++; 
       // This is where I thought about checking for object end and .pop off of stack. For each }]} or }} detected.
+      // 
       kChar = kString.substr(endIdx,2);
       if (kChar === "}]") {
         kObject = 'endOfArrayOfObjects';
@@ -204,7 +251,18 @@ function getNextValue(kString, parentKey, currentKey, kPointer, currentKeys, key
       }
     }
   }
-  //console.log(kString.substr(begIdx,(endIdx - begIdx)));
+
+  if ((currentKey ==='1089') || (parentKey === '1089')) {
+    console.log('--1089 ' + kString.substr(begIdx,(endIdx - begIdx))); // 08-10-2016
+    console.log(' -1089 begIdx:' + begIdx + ' endIdx:' + endIdx);
+  } else {
+    if (currentKey ==='skill_challenges') {
+      console.log('-- ' + kString.substr(begIdx,(endIdx - begIdx))); // 08-10-2016
+      console.log(' - begIdx:' + begIdx + ' endIdx:' + endIdx);
+      console.log(' - :' + kString.substr(begIdx, 50));
+    }
+  }
+
   rArray.push(endIdx);
   rArray.push(kObject);
   if (begIdx < 1) {
@@ -235,7 +293,12 @@ function getSingularFromPlural(currentKey) {
     sKey = partA + partB;
   } else {
     sLength = currentKey.length;
-    sKey = currentKey.substr(0, (sLength - 1));
+    // Because some objects are written in the singluar voice or have one occurance. 08-09-2016
+    if (currentKey.charAt(sLength - 1) === 's') {
+      sKey = currentKey.substr(0, (sLength - 1));
+    } else { 
+      sKey = currentKey;
+    } // end 08-09-2016 change.
   }
   return sKey;
 }
@@ -252,6 +315,7 @@ function haveAnObject(oString, parentKey, strPointer, loopLimit) {
     }
     if (arrayOfObjectsStack.indexOf(parentKey) < 0) {  
       arrayOfObjectsStack.push(parentKey); // stack of the objects we are processing
+      arrayOfObjectsStackIdx.push(strPointer);
     }
   }
   //  console.log("Have an Object starting at " + strPointer);
@@ -259,38 +323,43 @@ function haveAnObject(oString, parentKey, strPointer, loopLimit) {
   do {
     arrayOfValues = getNextKey(oString, parentKey, strPointer);
     //NO! haokeyAdded = arrayOfValues[5];
-    console.log("Post getNextKey " + arrayOfValues);
-
-    if (arrayOfValues[1] > 928 && arrayOfValues[1] < 1190) {
-      console.log("detected key is " + oString.substr(arrayOfValues[0],(arrayOfValues[1]- arrayOfValues[0])));
+    if (myDebug === true) {
+      console.log("Post getNextKey " + arrayOfValues);
     }
+
+    //if (arrayOfValues[1] > 928 && arrayOfValues[1] < 1190) {
+    //  console.log("detected key is " + oString.substr(arrayOfValues[0],(arrayOfValues[1]- arrayOfValues[0])));
+    //}
 
     if ((arrayOfValues[0] > 0) && (arrayOfValues[1] > 0)) {
       myKey = arrayOfValues[3];
       currentKeys.push(myKey);
-      console.log("Before getNextValue call:" + arrayOfValues);
+      if (myDebug === true) {
+        console.log("Before getNextValue call:" + arrayOfValues);
+      }
       arrayOfValues = getNextValue(oString, parentKey, myKey, arrayOfValues[1], currentKeys, arrayOfValues[5]);
 
       strPointer = arrayOfValues[1];
     }
 
-    if (arrayOfValues[1] > 928 && arrayOfValues[1] < 1190) { 
-      console.log("Key-Value loop array" + arrayOfValues);
-      console.log("Data is:" + oString.substr(arrayOfValues[0],(arrayOfValues[1]- arrayOfValues[0])));
-    }
+    //if (arrayOfValues[1] > 928 && arrayOfValues[1] < 1190) { 
+    //  console.log("Key-Value loop array" + arrayOfValues);
+    //  console.log("Data is:" + oString.substr(arrayOfValues[0],(arrayOfValues[1]- arrayOfValues[0])));
+    //}
   } while (arrayOfValues[2] === 'normal');
   
-  if (arrayOfValues[1] > 928 ) {
-  console.log("Exited Do loop haveAnObject " + arrayOfValues[2]);
-  console.log('myKey is ' + myKey);
-  console.log("charAt " + arrayOfValues[1] + " is "+ oString.charAt(arrayOfValues[1]));
-  console.log("30 chars" + oString.substr(arrayOfValues[1],30));
-  console.log("Parent key is " + parentKey);
-  console.log("Full arrayOfValues:" + arrayOfValues);
-  }
+  //if (arrayOfValues[1] > 928 ) {
+  //console.log("Exited Do loop haveAnObject " + arrayOfValues[2]);
+  //console.log('myKey is ' + myKey);
+  //console.log("charAt " + arrayOfValues[1] + " is "+ oString.charAt(arrayOfValues[1]));
+  //console.log("30 chars" + oString.substr(arrayOfValues[1],30));
+  //console.log("Parent key is " + parentKey);
+  //console.log("Full arrayOfValues:" + arrayOfValues);
+  //}
 
   if ((arrayOfValues[2] === 'endOfArrayOfObjects') || ( arrayOfValues[2] === 'endOfObject')) {
     console.log("Pre arrayOfObjectsStack pop:" + arrayOfObjectsStack);
+    console.log("Pre arrayOfObjectsStack pop:" + arrayOfObjectsStackIdx);
     if (haokeyAdded === true) { //key was added
       // arrayOfCode.push("} // terminator for " + parentKey + "." + myKey);
       arrayOfCode.push("} // terminator for " + arrayOfObjectsStack[(arrayOfObjectsStack.length - 2)] + "." + arrayOfObjectsStack[(arrayOfObjectsStack.length - 1)]); //array zero based math
@@ -298,14 +367,16 @@ function haveAnObject(oString, parentKey, strPointer, loopLimit) {
       console.log("haokeyAdded:" + haokeyAdded + " parentKey:" + parentKey + " myKey:" + myKey);
     }
     arrayOfObjectsStack.pop(); // remove the current object
+    arrayOfObjectsStackIdx.pop();
     console.log("Post arrayOfObjectsStack pop:" + arrayOfObjectsStack);
     console.log("Simulated parentKey is:" + arrayOfObjectsStack[(arrayOfObjectsStack.length - 1)]);
     if (oString.substr(arrayOfValues[1],2) === ',"') {
       myKey = arrayOfObjectsStack[(arrayOfObjectsStack.length - 1)];
       haveAnObject(oString, myKey, arrayOfValues[1], loopLimit);
     } else { // 2015-05-20. At this point, you need to traverse back up to next higher object.
-      console.log("Exit string:" + oString.substr(arrayOfValues[1],2));
+      console.log("Exit string at:" + arrayOfValues[1] + ' is:' + oString.substr(arrayOfValues[1],6));
       haoIdx = oString.indexOf(',',arrayOfValues[1]); // get the position of the next , character
+      // 2016-09-16 You might have multiple object ends here?
       if ( haoIdx > 0 ) {                               // found one
         haoString = oString.substr(arrayOfValues[1],(haoIdx - arrayOfValues[1]));
         console.log("Data between value and ,:" + haoString); 
@@ -330,6 +401,8 @@ function haveAnObject(oString, parentKey, strPointer, loopLimit) {
 function addToKeyArray (pKey) { 
   var keyWasAdded = false;
   if (arrayOfKeys.indexOf(pKey) < 0) {  // not currently in the "array". 
+    console.log("--Current array:" + arrayOfKeys);
+    console.log("--Key adding:" + pKey + " indexOf.value:" + arrayOfKeys.indexOf(pKey));
     arrayOfKeys.push(pKey);
     arrayOfKeysDebug.push(pKey + " " + gblBeginIndex);
     keyWasAdded = true;
@@ -410,7 +483,9 @@ $(document).ready(function() {
      
       arrayOfCode.push("} // terminator for data." + arrayOfObjectsStack[0]); //array zero based math     
       var myContent = "";
-      console.log(arrayOfKeys.length);
+      if (myDebug === true) {
+        console.log(arrayOfKeys.length);
+      }
 
       for ( var i=0; i < arrayOfVariables.length; i++) {
         myContent = myContent + arrayOfVariables[i] + "\n";
@@ -440,7 +515,8 @@ $(document).ready(function() {
       arrayOfVariables = [];
       arrayOfKeys = [];
       arrayOfValues = [];
-      arrayOfObjects = [];      
+      arrayOfObjects = [];
+      arrayOfObjectsStackIdx= [];      
 
       $searchField.prop("disabled", false);
       $submitButton.attr("disabled", false).val("Parse");
