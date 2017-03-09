@@ -56,10 +56,9 @@ const $activities = $(".activities label");
 
 
 $(idName).focus();				// requirement 1. 
-$(idName).after(lNameError);
-const $idNameError = $("#nameError");
-$idNameError.css("color", "maroon");	// set color to maroon for visibility
-$idNameError.hide();
+// append name error message. set color to maroon
+const $idNameError = domAppendAndHide($(idName), lNameError, "#nameError", "maroon");
+
 $("#colors-js-puns").hide();
 
 // get all the shirt colors and put them either into puns or hearts.
@@ -77,29 +76,24 @@ const inputCssBorder = $( "input").css("border");
 const inputCssBorderError = '2px solid red';
 const labelColor = $('label').css("color");
 const labelColorDisable = "grey";
-$(idBitcoin).after('<div id="paymentError">' + lPaymentErrorSelect + '</div>');
-$(idPaymentError).css("color", "maroon");
 
-$(idTitle).after(lOtherTitle);					// append the user "other role" text box after title dropdown.
-const $otherTitle = $(idOtherTitle);			// jQuery select this input text box
-$otherTitle.hide();								// hide it until user selects title = other.
+var lPaymentError = '<div id="paymentError">' + lPaymentErrorSelect + '</div>';
+$(idBitcoin).after(lPaymentError);
+setCssProperty($(idPaymentError), "color", "maroon");
 
-$otherTitle.after(lOtherTitleError);			// append the error message
-$(idOtherTitleError).css("color", "maroon");	// set color to maroon for visibility
-$(idOtherTitleError).hide();					// hide it until there is an error.
+// append the user "other role" text box after title dropdown.
+const $otherTitle = domAppendAndHide($(idTitle), lOtherTitle, idOtherTitle, false);
 
-$eMail.after(lEmailError);						// append the email error				
-const $eMailError = $('#emailError');			// setup jQuery DOM reference
-$eMailError.hide();								// hide it until there is an error.
+// append the error message. set color to maroon
+const $idOtherTitleError = domAppendAndHide($otherTitle, lOtherTitleError, idOtherTitleError, "maroon");
+// append the email error. leave default color				
+const $eMailError = domAppendAndHide($eMail, lEmailError, "#emailError", false);
 
 $(classActivities).after(lTotalCost);
 const $totalCost = $(idTotalCost);
 $totalCost.hide();
-
-$(classActivities).after(lActivityError);
-const $activityError = $("#activityError");
-$activityError.css("color", "maroon");			// set color to maroon for visibility
-$activityError.hide();
+// append the activity error message. set color to maroon
+const $activityError = domAppendAndHide($(classActivities), lActivityError, "#activityError", "maroon");
 
 setPaymentDomExclusion(idCreditCard);			// show idCreditCard, hide idPaypal, idBitcoin, idPaymentError
 $('[name=user_payment]').val('credit card');	// set credit card as default payment selection.
@@ -109,7 +103,15 @@ setConflictTimes();
 //* --------------------- *//
 //* Function section      *//
 //* --------------------- *//
-
+function domAppendAndHide(sourceDom, newDomElement, newDomID, color) {
+	sourceDom.after(newDomElement);
+	var $tempDom = $(newDomID);
+	$tempDom.hide();
+	if (color) {
+		setCssProperty($tempDom, "color", color);
+	}
+	return $tempDom;
+}
 // const setConflictTimes = () => {
 function setConflictTimes() {
 
@@ -341,7 +343,7 @@ $(idTitle).change( function() {
 		$otherTitle.focus();
 	} else {
 		$otherTitle.hide();
-		$(idOtherTitleError).hide();
+		$idOtherTitleError.hide();
 
 	}
 });
@@ -349,14 +351,14 @@ $(idOtherTitle).blur( function(){
 	setInputBorder( $otherTitle, inputCssBorder);
 	if ($(idTitle).val() == "other") {
 		if ( $(idOtherTitle)[0].value > "") {
-			$(idOtherTitleError).hide();
+			$idOtherTitleError.hide();
 		} else {
 			$otherTitle.focus();
 			setInputBorder( $otherTitle, inputCssBorderError);
-			$(idOtherTitleError).show();
+			$idOtherTitleError.show();
 		}
 	} else {
-		$(idOtherTitleError).hide();	// really odd event firing this blur on a title change.
+		$idOtherTitleError.hide();	// really odd event firing this blur on a title change.
 	}
 });
 
