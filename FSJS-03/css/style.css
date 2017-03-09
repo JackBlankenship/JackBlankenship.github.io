@@ -134,7 +134,9 @@ button:hover {
 .credit-card {
 	margin-top: 1.25em;
 }
-
+.disabled {
+	color: grey;
+}
 /* ================================= 
   Helper Classes
 ==================================== */

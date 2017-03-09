@@ -75,6 +75,8 @@ for (var iShirts = 0; iShirts < shirtsArray.length; iShirts++) {
 
 const inputCssBorder = $( "input").css("border");
 const inputCssBorderError = '2px solid red';
+const labelColor = $('label').css("color");
+const labelColorDisable = "grey";
 $(idBitcoin).after('<div id="paymentError">' + lPaymentErrorSelect + '</div>');
 $(idPaymentError).css("color", "maroon");
 
@@ -99,10 +101,7 @@ const $activityError = $("#activityError");
 $activityError.css("color", "maroon");			// set color to maroon for visibility
 $activityError.hide();
 
-setPaymentDomExclusion(idCreditCard);
-//$(idPaypal).hide();
-//$(idBitcoin).hide();
-//$(idPaymentError).hide();
+setPaymentDomExclusion(idCreditCard);			// show idCreditCard, hide idPaypal, idBitcoin, idPaymentError
 $('[name=user_payment]').val('credit card');	// set credit card as default payment selection.
 
 setConflictTimes();
@@ -193,7 +192,6 @@ function getDateTimeData(thisDayTime) {
 	endTime = thisDayTime.substr(splitIndex + 1);			// offset for the -
 	beginTime = getTwentyFourHour(beginTime);				// get 24 hour clock on beginTime.
 	endTime = getTwentyFourHour(endTime);					// get 24 hour clock on endTime.
-	console.log("Day:" + thisDay + ":begin:" + beginTime + ":" + endTime);
 	activity['day'] = thisDay;								// set all three to the activity object.
 	activity['begin'] = beginTime;
 	activity['end'] = endTime;
@@ -262,15 +260,13 @@ function validateCardInfo () {
 };
 
 function ReadyForSubmit() {
-	console.log("check ready");
+
 	validName = verifyName();
 	formValid = true;
-
 
 	if (paymentValid) {
 	} else {
 		if (emailValid && activityValid && validName) {
-			console.log("card validate time.");
 			if ( $(idPayment).val() == "credit card") {
 				validateCardInfo();
 			}
@@ -282,7 +278,6 @@ function ReadyForSubmit() {
 		$activityError.hide();
 	} else {
 		$activities[0].focus();
-		console.log("activities focus")
 		$activityError.show();	
 	};
 
@@ -291,7 +286,6 @@ function ReadyForSubmit() {
 		$eMailError.show();
 		setInputBorder($eMail, inputCssBorderError);
 		$eMail.focus();
-		console.log("email focus");
 		formValid = false;
 	};
 
@@ -300,7 +294,6 @@ function ReadyForSubmit() {
 	} else {
 		$(idName).focus();
 		$idNameError.show();
-		console.log("name focus");
 		formValid = false;
 	};
 
@@ -312,7 +305,6 @@ function ReadyForSubmit() {
 
 function verifyName() {
 	if( $(idName).val() > "" ) {
-		console.log($(idName).val());
 		var nameArray = $(idName).val().split(" ");
 		if (nameArray.length > 1) {
 			setInputBorder($(idName), inputCssBorder);
@@ -322,8 +314,12 @@ function verifyName() {
 	setInputBorder( $(idName), inputCssBorderError);
 	return false;
 };
+// next refactor change to setCssProperty(domElement, property, value)
 function setInputBorder(domElement, style) {
-	domElement.css("border", style);
+	setCssProperty(domElement, "border", style);
+}
+function setCssProperty(domElement, property, value) {
+	domElement.css(property, value);
 }
 function setPaymentDomExclusion (showDom) {
 	for (let i=0; i< paymentDomExclusion.length; i++) {
@@ -384,6 +380,25 @@ $('.activities').on('change', ':checkbox', function () {
 	function toggleEventAvailability(array, value) {
 		for (var i = 0; i < array.length ; i++) {
 			$activities[ array[i]].firstElementChild.disabled = value;
+// the following did not work....			
+//			setCssProperty($activities[ array[i]].firstElementChild, "color", labelColorDisable);
+// so we check to see if disabled value = true, then add class ONLY when the index matches the activity to grey out
+// otherwise we remove disabled class. This came about during testing on Microsoft Edge browser as visually the checkbox
+// grey out was really hard to see.
+			if (value) {
+				$activities.addClass(function(index) {
+					if (index === array[i]) {
+						return "disabled";
+					}
+				});
+
+			 } else {
+			 	$activities.removeClass(function(index) {
+			 		if (index === array[i]) {
+			 			return "disabled"; 
+			 		}
+			 	}); 
+			}
 		}
 	}
 
@@ -446,10 +461,7 @@ $(idPayment).change( function() {
 	ReadyForSubmit();
 });
 
-$(idCreditCard).blur( function () {
-	//console.log("credit-card div blur");
-});
-
+//$(idCreditCard).blur( function () { });
 $(idCCNum).blur( function () {
 
 	// to account for when someone reselects payment method after tabbing ccnum field.
@@ -460,7 +472,6 @@ $(idCCNum).blur( function () {
 			$(idPaymentError).text(lPaymentErrorNoCard);
 			$(idPaymentError).show();
 			setInputBorder( $(idCCNum), inputCssBorderError);
-			console.log("ccnum blur");
 			$(idCCNum).focus();
 		}
 	}
@@ -472,7 +483,6 @@ $(idCVV).keyup( function(){
 })
 $(idCVV).blur( function () {
 	validateCardInfo();
-	console.log("cvv blur");
 	if (paymentValid) {
 		$('button').focus();
 	}
@@ -480,7 +490,7 @@ $(idCVV).blur( function () {
 
 //$eMail.change( validateEmail('change'));
 $(idEMail).keyup( function (){
-//	console.log('validate email ');
+
 	if ($eMail.val().length > 0) {
 		$eMailError.show();
 		var atSignIdx = $eMail.val().indexOf('@');
