@@ -1,3 +1,11 @@
+//* change log 03/10/2017
+//* 1. reset all the valid fields on submit. validName, emailValid, activityValid, paymentValid, formValid
+//* 2. Name and Email validation improvement. fixed logic error check on @.com
+//* 3. change to the html to support JavaScript being disabled or unavailable.
+//* 4. validate all payment fields at once and improve error message to support this feature. Massive changes here.
+//     these include a field validation refactor and change to error messaging.
+//* 5. added indicator (*) on which fields are required. (not part of the project requirements).
+//* 6. logic change for prevent duplicate times on Activities checkbox event.
 
 //* --------------------- *//
 //* Global variables      *//
@@ -14,14 +22,15 @@ var shirtsArray = [];
 var shirtsPunsColors = ""; 
 var shirtsHeartsColors = "";
 var propertyArray;
+var paymentErrorAll = "";
 
 //* error messages.
 const lNameError = '<p id="nameError">Please enter your first and last name</p>';
-const lPaymentErrorSelect = "Please select a payment method";
-const lPaymentErrorNoCard = "Missing credit card number.";
-const lPaymentErrorCardNumber = "Please enter a valid credit card number";
-const lPaymentErrorZip = "Please enter a valid zip code";
-const lPaymentErrorCVV = "Please enter a 3 digit CVV";
+const lPaymentErrorSelect = "<p>Please select a payment method</p>";
+const lPaymentErrorNoCard = "<p>Missing credit card number.</p>";
+const lPaymentErrorCardNumber = "<p.Please enter a valid credit card number.</p>";
+const lPaymentErrorZip = "<p>Please enter a valid zip code</p>";
+const lPaymentErrorCVV = "<p>Please enter a 3 digit CVV</p>";
 const lOtherTitle = '<input type="text" id="other-title" name="user_role" placeholder="Your Job Role">';
 const lOtherTitleError = '<p id="other-titleError">Please enter your Job Role</p>';
 const lEmailError = '<p id="emailError">Please enter an Email like me@home.com</p>';
@@ -82,7 +91,9 @@ $(idBitcoin).after(lPaymentError);
 setCssProperty($(idPaymentError), "color", "maroon");
 
 // append the user "other role" text box after title dropdown.
-const $otherTitle = domAppendAndHide($(idTitle), lOtherTitle, idOtherTitle, false);
+//const $otherTitle = domAppendAndHide($(idTitle), lOtherTitle, idOtherTitle, false);
+const $otherTitle = $(idOtherTitle);
+$otherTitle.hide();
 
 // append the error message. set color to maroon
 const $idOtherTitleError = domAppendAndHide($otherTitle, lOtherTitleError, idOtherTitleError, "maroon");
@@ -221,43 +232,102 @@ function getTwentyFourHour(twelveHour) {
 	}
 	 return twentyFour;
 };
-function validateCvv () {
- 	var nCVV = Number($(idCVV).val()).toString();
- 	if (nCVV.length === 3) {
-		paymentValid = true;
-		$(idPaymentError).hide();
-		setInputBorder( $(idCVV), inputCssBorder);	
-		ReadyForSubmit();
-	} else {
-		$(idPaymentError).text(lPaymentErrorCVV);
-		$(idPaymentError).show();
-		setInputBorder( $(idCVV), inputCssBorderError);
-		$(idCVV).focus();
-	}
-}
+
+
 function validateCardInfo () {
 
- 	paymentValid = false;
+ 	paymentValid = true;
  	var nCCnum = Number($(idCCNum).val()).toString();
  	var nZip = Number($(idZip).val()).toString();
+ 	var nCVV = Number($(idCVV).val()).toString();
 
- 	if ( (nCCnum.length >= 13) && (nCCnum.length <= 16) ) {
- 		setInputBorder( $(idCCNum), inputCssBorder);
-		if (nZip.length === 5) {
-			setInputBorder( $(idZip), inputCssBorder);
-			validateCvv();
+// 	function validateCvv () {
+//		console.log("validateCvv");
+//		
+// 		if (nCVV.length === 3) {
+//			$(idPaymentError).hide();
+//			setInputBorder( $(idCVV), inputCssBorder);	
+//		} else {
+//			paymentValid = false;
+//			paymentErrorAll += lPaymentErrorCVV;
+//			setInputBorder( $(idCVV), inputCssBorderError);
+//			$(idCVV).focus();
+//		}
+//	};
+
+//	function validateZip () {
+//		console.log("validateZip");
+//		if (nZip.length === 5) {
+//			setInputBorder( $(idZip), inputCssBorder);
+//		} else {
+//			paymentErrorAll += lPaymentErrorZip;
+//		}
+//		$(idPaymentError).show();
+//		setInputBorder( $(idZip), inputCssBorderError);
+//		paymentValid = false;
+//		$(idZip).focus();
+//	};
+
+//	function validateCard () {
+//		console.log("validateCard length:"+ nCCnum.length + " credit-card:" + nCCnum +":");
+//		if ( (nCCnum.length >= 13) && (nCCnum.length <= 16) ) {
+// 			setInputBorder( $(idCCNum), inputCssBorder);
+//		} else {
+//	 		if ( (nCCnum.length < 1) || (nCCnum === "0") )  {
+//				paymentErrorAll += lPaymentErrorNoCard;
+//			} else {
+//				paymentErrorAll += lPaymentErrorCardNumber;
+//			}
+//			setInputBorder( $(idCCNum), inputCssBorderError);
+//			$(idCCNum).focus();
+//			paymentValid  = false;
+//		}
+//	};
+	function validateCardField(source, minLength, maxLength, domElement, errorMessage, zeroInvalid, errorMessage2) {
+
+		if ((source.length < minLength) || (source.length > maxLength)) {
+			setInputBorder( domElement, inputCssBorderError);
+			if (zeroInvalid && source < 1) {
+				paymentErrorAll += errorMessage2;
+			} else {
+				paymentErrorAll += errorMessage;
+			}
+			paymentValid = false;
+			return false;
 		} else {
-			$(idPaymentError).text(lPaymentErrorZip);
-			$(idPaymentError).show();
-			setInputBorder( $(idZip), inputCssBorderError);
-			$(idZip).focus();
-		}
-	} else {
-		$(idPaymentError).text(lPaymentErrorCardNumber);
-		$(idPaymentError).show();
-		setInputBorder( $(idCCNum), inputCssBorderError);
+			setInputBorder( domElement, inputCssBorder);
+			return true;
+		};
+
+	};
+
+	paymentErrorAll = "<p>Please correct the following errors.</p>";
+// 	validateCard();
+//	validateZip();
+// 	validateCvv();
+	var validCard = validateCardField( nCCnum, 13, 16, $(idCCNum), lPaymentErrorCardNumber, true, lPaymentErrorNoCard);
+	if (validCard) {
+		$(idZip).focus();
+	}
+	var validZip = validateCardField( nZip, 5, 5, $(idZip), lPaymentErrorZip, false, null);
+	if (validZip) {
+		$(idCVV).focus();
+	};
+	var validCVV = validateCardField( nCVV, 3, 3, $(idCVV), lPaymentErrorCVV, false, null);
+
+	if(!validCard) {
 		$(idCCNum).focus();
 	}
+
+	if (paymentValid) {
+		$('button').focus();
+		$(idPaymentError).hide();
+		ReadyForSubmit();
+	} else {
+		$(idPaymentError).html(paymentErrorAll);
+		$(idPaymentError).show();
+		formValid = false;
+	};
 
 };
 
@@ -266,13 +336,19 @@ function ReadyForSubmit() {
 	validName = verifyName();
 	formValid = true;
 
-	if (paymentValid) {
-	} else {
-		if (emailValid && activityValid && validName) {
+	if (!paymentValid) {
+//	} else {
+//		if (emailValid && activityValid && validName) {
 			if ( $(idPayment).val() == "credit card") {
 				validateCardInfo();
-			}
-		}	
+			} else {
+				validatePaymentType();
+			};
+//		}	
+		formValid = false;
+	};
+
+	if (!emailValid || !activityValid || !validName || !paymentValid) {
 		formValid = false;
 	};
 
@@ -283,33 +359,31 @@ function ReadyForSubmit() {
 		$activityError.show();	
 	};
 
-	if (emailValid) {
-	} else {
+	if (!emailValid) {
 		$eMailError.show();
 		setInputBorder($eMail, inputCssBorderError);
 		$eMail.focus();
-		formValid = false;
 	};
 
-	if (validName) {
-		$idNameError.hide();
-	} else {
+	if (!validName) {
 		$(idName).focus();
 		$idNameError.show();
-		formValid = false;
 	};
 
 	if (formValid) {
 		$('button').focus();
+		$("#submitready").hide();
 	};
 	
 };
 
 function verifyName() {
+
 	if( $(idName).val() > "" ) {
 		var nameArray = $(idName).val().split(" ");
 		if (nameArray.length > 1) {
 			setInputBorder($(idName), inputCssBorder);
+			$idNameError.hide();
 			return true;
 		}
 	};
@@ -332,10 +406,48 @@ function setPaymentDomExclusion (showDom) {
 		}
 	}
 };
+function validateEmail () {
+	if ($eMail.val().length > 0) {
+		$eMailError.show();
+		var atSignIdx = $eMail.val().indexOf('@');
+
+		if (atSignIdx > 0)	{
+			atSignIdx = $eMail.val().indexOf(".", (atSignIdx + 2));
+
+			if ( atSignIdx  > 0 ) {
+				$eMailError.hide();
+				emailValid = true;
+				setInputBorder($eMail, inputCssBorder);
+			}
+		}
+	}
+};
+function validatePaymentType () {
+	if ($(idPayment).val() == "credit card") {
+		setPaymentDomExclusion(idCreditCard);
+		$(idCCNum).focus();
+		validateCardInfo();
+	} else 	if ($(idPayment).val() == "paypal") {
+		setPaymentDomExclusion(idPaypal);
+		paymentValid = true;
+	} else 	if ($(idPayment).val() == "bitcoin") {
+		setPaymentDomExclusion(idBitcoin);
+		paymentValid = true;
+	} else {
+		$(idPaymentError).html(lPaymentErrorSelect);
+		$(idPaymentError).show();
+		paymentValid = false;
+	};
+};
 //* --------------------- *//
 //*  Events  section      *//
 //* --------------------- *//
-
+$(idName).keyup( function () {
+	validName = verifyName();
+});
+$(idName).change( function () {
+	validName = verifyName();
+});
 // requirement 2.
 $(idTitle).change( function() {
 	if ($(idTitle).val() == "other") {
@@ -406,12 +518,14 @@ $('.activities').on('change', ':checkbox', function () {
 
 	activity = {};								// reset the object for next activity
     parseActivitiesData($(this).parent().text());
-    var activityIndex = 0; 											// not really happy with this setting an index and then
-    for (var i=0; i<activityArray.length; i++) {					// search through the array to find matching name on Object
-    	if ( activityArray[i]['name'] === activity['name'] ) {
-    		activityIndex = i;
-    	}
-    }
+    //var activityIndex = 0; 											// not really happy with this setting an index and then
+    //for (var i=0; i<activityArray.length; i++) {					// search through the array to find matching name on Object
+    //	if ( activityArray[i]['name'] === activity['name'] ) {
+    //		activityIndex = i;
+    //	}
+    //};
+    var activityIndex = $(".activities :checkbox").index(this);
+    //console.log("V4 New index:" + tempIndex + " old index:"+ activityIndex);
 
     propertyArray = Object.getOwnPropertyNames(activityArray[activityIndex]);	// get property names
 
@@ -443,74 +557,53 @@ $('.activities').on('change', ':checkbox', function () {
 
 $(idPayment).change( function() {
 //	const paymentType = $(this).val();
+	validatePaymentType();
+//	if ($(this).val() == "credit card") {
+//		setPaymentDomExclusion(idCreditCard);
+//		$(idCCNum).focus();
+//		validateCardInfo();
+//	} else 	if ($(this).val() == "paypal") {
+//		setPaymentDomExclusion(idPaypal);
+//		paymentValid = true;
+//	} else 	if ($(this).val() == "bitcoin") {
+//		setPaymentDomExclusion(idBitcoin);
+//		paymentValid = true;
+//	} else {
+//		$(idPaymentError).text(lPaymentErrorSelect);
+//		$(idPaymentError).show();
+//		paymentValid = false;
+//	};
 
-	if ($(this).val() == "credit card") {
-		setPaymentDomExclusion(idCreditCard);
-		$(idCCNum).focus();
-		validateCardInfo();
-	} else 	if ($(this).val() == "paypal") {
-		setPaymentDomExclusion(idPaypal);
-		paymentValid = true;
-	} else 	if ($(this).val() == "bitcoin") {
-		setPaymentDomExclusion(idBitcoin);
-		paymentValid = true;
-	} else {
-		$(idPaymentError).text(lPaymentErrorSelect);
-		$(idPaymentError).show();
-		paymentValid = false;
-	}
-
-	ReadyForSubmit();
+//	ReadyForSubmit();
 });
 
-//$(idCreditCard).blur( function () { });
-$(idCCNum).blur( function () {
-
-	// to account for when someone reselects payment method after tabbing ccnum field.
-	// because the blur is happening after $(idPayment).change
-	if ($(idPayment).val() == "credit card") { 		
-		var nCCnum = $(idCCNum).val();
- 		if (nCCnum.length < 1 ) {
-			$(idPaymentError).text(lPaymentErrorNoCard);
-			$(idPaymentError).show();
-			setInputBorder( $(idCCNum), inputCssBorderError);
-			$(idCCNum).focus();
-		}
-	}
-});
-
-//$(idZip).blur( function () { });
-$(idCVV).keyup( function(){
-	validateCvv();
-})
-$(idCVV).blur( function () {
+//$(idCreditCard).blur( function () {
+//	validateCardInfo();
+//});
+$(idCCNum).change( function () {
 	validateCardInfo();
-	if (paymentValid) {
-		$('button').focus();
-	}
 });
 
-//$eMail.change( validateEmail('change'));
-$(idEMail).keyup( function (){
-
-	if ($eMail.val().length > 0) {
-		$eMailError.show();
-		var atSignIdx = $eMail.val().indexOf('@');
-		if (atSignIdx > 0)	{
-			if ( $eMail.val().indexOf('.', atSignIdx) > 0 ) {
-				$eMailError.hide();
-				emailValid = true;
-				setInputBorder($eMail, inputCssBorder);
-			}
-		}
-	}
+$(idZip).change( function () {
+	validateCardInfo();
 });
+
+$(idCVV).keyup( function(){
+//	validateCvv();
+	validateCardInfo();
+})
+//$(idCVV).blur( );
+
+//$eMail.change( function () { validateEmail(); });
+$eMail.keyup(validateEmail).change(validateEmail);
 
 form.addEventListener('submit', (e) => {
 	if (!formValid) {
 		e.preventDefault();
+		console.log("form submit not valid yet");
 		ReadyForSubmit();
 	} else {
 		console.log("submit");
+		validName = false, emailValid = false, activityValid = false, paymentValid = false, formValid = false;
 	}
 });
