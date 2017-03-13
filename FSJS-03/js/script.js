@@ -23,12 +23,13 @@ var shirtsPunsColors = "";
 var shirtsHeartsColors = "";
 var propertyArray;
 var paymentErrorAll = "";
+var nameArray = [];
 
 //* error messages.
 const lNameError = '<p id="nameError">Please enter your first and last name</p>';
 const lPaymentErrorSelect = "<p>Please select a payment method</p>";
 const lPaymentErrorNoCard = "<p>Missing credit card number.</p>";
-const lPaymentErrorCardNumber = "<p.Please enter a valid credit card number.</p>";
+const lPaymentErrorCardNumber = "<p>Please enter a valid credit card number.</p>";
 const lPaymentErrorZip = "<p>Please enter a valid zip code</p>";
 const lPaymentErrorCVV = "<p>Please enter a 3 digit CVV</p>";
 const lOtherTitle = '<input type="text" id="other-title" name="user_role" placeholder="Your Job Role">';
@@ -311,7 +312,7 @@ function validateCardInfo () {
 
 		if ((source.length < minLength) || (source.length > maxLength)) {
 			setInputBorder( domElement, inputCssBorderError);
-			if (zeroInvalid && source < 1) {
+			if (zeroInvalid && (source < 1)) {
 				paymentErrorAll += errorMessage2;
 			} else {
 				paymentErrorAll += errorMessage;
@@ -404,8 +405,8 @@ function ReadyForSubmit() {		// yeah, need a better function name.
 function verifyName() {
 
 	if( $(idName).val() > "" ) {
-		var nameArray = $(idName).val().split(" ");
-		if (nameArray.length > 1) {
+		nameArray = $(idName).val().split(" ");
+		if ( (nameArray.length > 1) && (nameArray[1] > " ") ) {
 			setInputBorder($(idName), inputCssBorder);
 			$idNameError.hide();
 			return true;
