@@ -62,7 +62,7 @@ const form = document.getElementsByTagName('form')[0];
 const dElementIdColor = document.getElementById("color");
 const $eMail = $(idEMail);
 const $activities = $(".activities label");
-
+var $inputChecked = "";
 
 $(idName).focus();				// requirement 1. 
 // append name error message. set color to maroon
@@ -114,6 +114,30 @@ setConflictTimes();
 //* --------------------- *//
 //* Function section      *//
 //* --------------------- *//
+// removed countChecked because the back button logic does not trap all paths back to the submit form.
+//var countChecked = function () {
+//	totalCost = 0;
+//	$inputChecked = $("input:checked");		// should return an array?
+//	for (let i = 0; i<$inputChecked.length; i++) {
+//		$(".activities :checkbox").index($inputChecked[i]);	
+//		 parseActivitiesData($inputChecked[i].parentElement.textContent);
+//		 totalCost += activityCost;
+//	};
+//	setActivityValidFields();
+//};
+
+function setActivityValidFields() {
+    if (totalCost > 0) {
+    	$totalCost.text('Your total is $' + totalCost);
+    	$totalCost.show();
+    	activityValid = true;
+    	$activityError.hide();
+    } else {
+    	$totalCost.hide();
+    	activityValid = false;
+    	$activityError.show();
+    }
+};
 function domAppendAndHide(sourceDom, newDomElement, newDomID, color) {
 	sourceDom.after(newDomElement);
 	var $tempDom = $(newDomID);
@@ -331,20 +355,17 @@ function validateCardInfo () {
 
 };
 
-function ReadyForSubmit() {
+function ReadyForSubmit() {		// yeah, need a better function name.
 
-	validName = verifyName();
-	formValid = true;
+	validName = verifyName();	// forgot why i force this function fire here. 
+	formValid = true;			// set formValid to true. check required fields below to error.
 
 	if (!paymentValid) {
-//	} else {
-//		if (emailValid && activityValid && validName) {
-			if ( $(idPayment).val() == "credit card") {
-				validateCardInfo();
-			} else {
-				validatePaymentType();
-			};
-//		}	
+		if ( $(idPayment).val() == "credit card") {
+			validateCardInfo();
+		} else {
+			validatePaymentType();
+		};
 		formValid = false;
 	};
 
@@ -355,8 +376,11 @@ function ReadyForSubmit() {
 	if (activityValid) {
 		$activityError.hide();
 	} else {
+		//countChecked();					// due to back button // actually it still wont work and cant fix all situations.
+		//if (!activityValid) {
 		$activities[0].focus();
 		$activityError.show();	
+		//}
 	};
 
 	if (!emailValid) {
@@ -406,15 +430,15 @@ function setPaymentDomExclusion (showDom) {
 		}
 	}
 };
-function validateEmail () {
+function validateEmail () {				// this function gets called on change and keyup events.
 	if ($eMail.val().length > 0) {
 		$eMailError.show();
+		// so, according to the standards, you can have multiple @ within "". However, some browsers block that and error our BEFORE your code runs.
 		var atSignIdx = $eMail.val().indexOf('@');
 
 		if (atSignIdx > 0)	{
 			atSignIdx = $eMail.val().indexOf(".", (atSignIdx + 2));
-
-			if ( atSignIdx  > 0 ) {
+			if ( (atSignIdx  > 0) && $eMail.val().length > atSignIdx + 2 ) {
 				$eMailError.hide();
 				emailValid = true;
 				setInputBorder($eMail, inputCssBorder);
@@ -448,7 +472,7 @@ $(idName).keyup( function () {
 $(idName).change( function () {
 	validName = verifyName();
 });
-// requirement 2.
+
 $(idTitle).change( function() {
 	if ($(idTitle).val() == "other") {
 		$otherTitle.show(); 
@@ -525,7 +549,6 @@ $('.activities').on('change', ':checkbox', function () {
     //	}
     //};
     var activityIndex = $(".activities :checkbox").index(this);
-    //console.log("V4 New index:" + tempIndex + " old index:"+ activityIndex);
 
     propertyArray = Object.getOwnPropertyNames(activityArray[activityIndex]);	// get property names
 
@@ -542,44 +565,14 @@ $('.activities').on('change', ':checkbox', function () {
         }
         totalCost -= activityCost;												// subtract from total cost.
     }
+    setActivityValidFields();
 
-    if (totalCost > 0) {
-    	$totalCost.text('Your total is $' + totalCost);
-    	$totalCost.show();
-    	activityValid = true;
-    	$activityError.hide();
-    } else {
-    	$totalCost.hide();
-    	activityValid = false;
-    	$activityError.show();
-    }
 });
 
 $(idPayment).change( function() {
-//	const paymentType = $(this).val();
 	validatePaymentType();
-//	if ($(this).val() == "credit card") {
-//		setPaymentDomExclusion(idCreditCard);
-//		$(idCCNum).focus();
-//		validateCardInfo();
-//	} else 	if ($(this).val() == "paypal") {
-//		setPaymentDomExclusion(idPaypal);
-//		paymentValid = true;
-//	} else 	if ($(this).val() == "bitcoin") {
-//		setPaymentDomExclusion(idBitcoin);
-//		paymentValid = true;
-//	} else {
-//		$(idPaymentError).text(lPaymentErrorSelect);
-//		$(idPaymentError).show();
-//		paymentValid = false;
-//	};
-
-//	ReadyForSubmit();
 });
 
-//$(idCreditCard).blur( function () {
-//	validateCardInfo();
-//});
 $(idCCNum).change( function () {
 	validateCardInfo();
 });
@@ -589,13 +582,11 @@ $(idZip).change( function () {
 });
 
 $(idCVV).keyup( function(){
-//	validateCvv();
 	validateCardInfo();
 })
-//$(idCVV).blur( );
 
-//$eMail.change( function () { validateEmail(); });
-$eMail.keyup(validateEmail).change(validateEmail);
+$eMail.keyup( function () { validateEmail(); });
+$eMail.change( function () {validateEmail(); });
 
 form.addEventListener('submit', (e) => {
 	if (!formValid) {
@@ -605,5 +596,6 @@ form.addEventListener('submit', (e) => {
 	} else {
 		console.log("submit");
 		validName = false, emailValid = false, activityValid = false, paymentValid = false, formValid = false;
+		totalCost = 0;
 	}
 });
