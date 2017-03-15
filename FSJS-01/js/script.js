@@ -105,7 +105,7 @@ function loadQuoteArray() {
 	newQuote = { quote:"Reader, suppose you were an idiot. And suppose you were a member of Congress. But I repeat myself.", source:"Mark Twain", tags: "political, humor"};
 	quotes.push(newQuote);
 
-	newQuote = { quote:"Don't blindly follow your leaders", source:"Prince Farondis", citation: "World of Warcraft", year: "2016"};
+	newQuote = { quote:"Don't blindly follow anyone, especially your leaders", source:"Prince Farondis", citation: "World of Warcraft", year: "2016"};
 	quotes.push(newQuote);
 }
 
