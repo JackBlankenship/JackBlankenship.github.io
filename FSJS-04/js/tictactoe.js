@@ -1,5 +1,5 @@
 //tictactoe
-//!function(){
+!function(){
 	const gameDomEsclusion = ["#board", "#start", "#finish"];
 	const gameInit = ["N","N","N"];
 	const clickedValues = [[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]];
@@ -342,4 +342,4 @@ $("#finish .button").click( function() {
 	newGameLogic();
 });
 
-//}(); // wrapper end. DO NOT put code below here.
+}(); // wrapper end. DO NOT put code below here.
